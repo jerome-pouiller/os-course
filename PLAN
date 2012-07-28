@@ -14,7 +14,7 @@
   - Shell -> 2h
     - Historique: une des premier maniere de communique avec la machine (1970)
     - Plus ou moins normalisé, différentes implémentations, fonctionnent sur les *nix (Linux, android, iOS, OS compatibles Posix)
-    - Obtenir un shell
+    - Obtenir un shell -------------------------------> A revoir
     - Les différents shell (avec leurs historiques)
     - Lancer une commande
     - Les chemins
@@ -26,11 +26,16 @@
     - Les options longues/courtes
       - getopts
     - Les commandes Posix
-    - Les coreutils: ls, ls -l, cat, cat -e, cat -n, 
     - Le PATH
       - execve, ARGV[0]
     - Lancer une binaire locale
+    - Les coreutils: ls, ls -l, cat, cat -e, cat -n, 
     - La commande ``file'', les type mimes, les extentions
+    - Les redirection: 
+       - e/s standards
+       - Les file descriptor
+       - > < | << EOF
+       - ls reagit differement avec une redirection: colonne, couleurs
     - Les variables:
        - Affectation, concatenation
        - variable locales
@@ -42,17 +47,23 @@
        - Les paramètres
        - Les sous-shell
        - Les expressions mathématiques $(()) ou $[]
-    - Les redirection: 
-       - e/s standards
-       - Les file descriptor
-       - > < | << EOF
-    - Les différents fichiers de configuration
-       - .Xshrc
-       - /etc/*.conf
-    - Les alias
+    - L'escaping et le quoting
+      - \
+      - "
+      - '
+      - /!\ `
+    - Le terminal
+      - C'est le bordel
+      - $TERM
+      - Ctrl+V
+      - Mode graphique
+      - Les bindings de touches:
+        - VT102 -> Infernal
+        - Meta-q, Ctrl+gauche, ....
+    - Les alias           
     - Le globbing
       - Les deux exception: find et dpkg
-    - ~ et les braces
+    - ~ et les braces         
     - Grep et les expression régulière
     - ed, sed, vi, emacs, vim, nano
     - awk, perl
@@ -64,9 +75,8 @@
     - La completion
       - La completion avancée
     - La documentation: man, Meta-H
-    - Les bindings de touches:
-       - VT102 -> Infernal
-       - Meta-q, Ctrl+gauche, ....
+
+
     - Le réseau
       - /etc/resolv.conf
       - Les proxy DNS -> /run/nm...
@@ -92,12 +102,16 @@
        - Stickybit
        - SetUID -> /bin/ping
     - Un peu d'administration:
-       - tar.gz/cpio / dpkg (-item -l -L -S) / rpm (-i -q) / ipk
+       - tar.gz/cpio / dpkg (-i -l -L -S) / rpm (-i -q) / ipk
        - apt-get / urpmi / yum
        - apt-cache, apt-get source, apt-get source -b, apt-get builddeps, etc...
+    - Les différents fichiers de configuration -> A mettre dans l'arborescence
+       - .Xshrc
+       - /etc/*.conf
 
   - L'arborescence -> 2h
     - Les différents fichiers: normaux, repertoire, liens, des filedevice characters, des filedevice block, des pipe, des socket nommées.
+    - Les seuls carcatère interdits sont / et \0
     - /usr/bin /bin /usr/sbin /sbin
       - Séparation /usr et /
       - Séparation bin et sbin
