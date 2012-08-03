@@ -1,0 +1,6 @@
+%.o: %.c
+	$(COMPILE.c) -MMD -o $@ $<
+
+HELLO_SRC = hello.c
+-include $(HELLO_SRC:%.c=%.d)
+hello: $(HELLO_SRC:%.c=%.o)

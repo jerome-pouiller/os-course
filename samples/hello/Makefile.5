@@ -1,0 +1,20 @@
+all: hello
+
+HELLO_SRC = hello.c
+hello: $(HELLO_SRC:%.c=%.o)
+-include $(HELLO_SRC:%.c=%.d)
+
+%.o: %.c
+	$(COMPILE.c) -MMD -o $@ $<
+
+clean:
+	rm -f hello $(HELLO_SRC:%.c=%.o) $(HELLO_SRC:%.c=%.d)
+
+debug-x86:
+	[ -d debug ] || mkdir debug 
+	make -C debug -f ../Makefile VPATH=.. CFLAGS=-g
+
+debug-arm:
+	[ -d debug ] || mkdir debug 
+	make -C debug -f ../Makefile VPATH=.. CFLAGS=-g CC=arm-linux-gcc
+

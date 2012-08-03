@@ -1,0 +1,5 @@
+%.o: %.c
+	$(COMPILE.c) -MMD -o $@ $<
+
+-include hello.d
+hello: hello.o

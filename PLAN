@@ -1,6 +1,8 @@
   Objectif: Découvrir les systèmes d'exploitation en se basant sur Linux.
   Pedagogie: On apprend à utiliser Linxu et on généralise certaines connaissance.
 
+Jamais de commentaires: ca a été dur à écrire, ca doit ête dur à comprendre.
+
   - Les Grandes classes d'OS moderne (== Posix?) -> Il faut juste expliquer ce qu'est Posix et y revenir plus tard -> 10min
      - Posix, embarqué ou non
      - Les non-Posix, embarqué ou non
@@ -9,12 +11,25 @@
        - Generique et generaliste : systeme embarqué -> suprcalculateur
        - Pedagogique car ouvert
        - Bonne application des standard -> Beaucoup d'autre OS n'ont qu'une sous ensemble de ses fonctionnalités
+      - Il domine le marché: 
+           * entre 20M et 60M de PC sous Linux
+           * 200M de terminaux Android
+           * Google : 1M servers sous Linux
+           * 30M (60% des 50M) de serveur dans le monde
+           * 99% des supercalculateur
+           * 30M de box en France 
+           * Le materiel medical, les tv, les lecteur de dvd, les appareils photos, etc...
+           * j'ai personnellement embarqué linux dans une station nucléaire, un portail d'aeroport, un satellite, des calculateur 3D, des régies TV, les routeur réseau, des modem ADSL, des boitier multimédia.
+           * A comparer avec 1000M de PC (sous Windows)
     - Liste d'OS -> nous y reviendrons lorsque nous aurons pris un peu de recul
       - Windows, Linux, VxWorks, MacOSX, Android, (cf chronologie), psos, ecos, rtos, ucosII, msdos, *BSD, SysV, 
   - Shell -> 2h
     - Historique: une des premier maniere de communique avec la machine (1970)
     - Plus ou moins normalisé, différentes implémentations, fonctionnent sur les *nix (Linux, android, iOS, OS compatibles Posix)
     - Obtenir un shell -------------------------------> A revoir
+      - Il faut un terminal:
+        - xterm, gnuterm, konsole
+        - Ctrl+Alt+F
     - Les différents shell (avec leurs historiques)
     - Lancer une commande
     - Les chemins
@@ -156,7 +171,7 @@
        - ext2
     - Nom de fichiers authorisé sous *nix: tous les caractère sauf / et NUL
     - Systeme de fichier journalisé: en quoi ca consiste
-
+    - Les système COW, unionfs, en quoi ca consiste
   - La compilation
     - Makefile
       - target: deps
@@ -216,7 +231,10 @@
       - Le TLB
   - La gestion de la mémoire
      - En user space
+       - La pile, le tas, les variable globale
+       - Structure de la pile
        - L'allogrithme de malloc
+       - Allocon sur la pile: Alloca et "char buf[i];"
        - D'autres algorithme
        - Les technique de debug
          - libefence
@@ -230,6 +248,22 @@
        - mem(l'autre que memcheck)
      - Allocation mémoire et predictabilité
   - Format des fichiers ELF -> A faire après la memoire
+    - Autre format : COFF, PE/COFF (windows), COM
+      - Le format COM: pas de header. Chargé en 0x100
+      - relocation des .o:
+           -  A la compilation, le compilateur rempli les addresses nons résolue avec 0 et ajoute une entrée dans la table des relocation. cette entré contient l'offset ou ce trouve l'indirection et le symbole attendu (avec eventuellement un offset)
+      - Les DLL: contiennent une table de relocation et sont résolut à l'éxecution (en fait, il y a une adresse par defaut, si celle ci marche, pas besoin de relocaliser)
+         - Probleme: Comment partager le code la dll entre les processus qui l'utilise à des addresse differentes
+         - ... pas de réponse. Sous windows, les bibliothèque partagée ne sont pas partagée (en fait, elle sont partagée uniquement si ce sont deux instances de la même binaire). -> Perte de mémoire. C'est aussi pour cette raison que les applications n'hésitent pas à livrer leur version de bibliothèque
+      - PIC
+         -> Pour du code, on fait du relatif à pc
+         -> b 0x10 -> b pc+0x5
+         -> Pour la variable globale, il faut ajouter une indirection que l'on place dans la Global Object Table 
+         -> ld r1,$0x10 -> ld r1, $(pc+0x42+0x5)
+                                   ^^^^ ^^^
+                                     |    `- offset de la variable dans la GOT
+                                     `- offset de la GOT
+      - Randomization de la mémoire (heap et lib) (sécurité)
     - Script de link (c'est la suite de la compilation, mais apres avoir compris le fonctionnement de la MMU)
     - Format d'appel des fonctions
     - resolution dynamique des symboles, LD_PRELOAD, LD_LIBRARY_PATH
@@ -238,6 +272,9 @@
     - les symboles/sections de debug -> objcopy, strip
     - Comment fonctionne un debuggeur? -> gdb 
       - Coredump
+      - ulimit -c unlimited
+      - echo /tmp/core | sudo tee /proc/sys/kernel/core_pattern
+      - objdump -x sur le coredump
       - host/target
     - Comment fonctionne une sonde JTAG? -> openocd
     - Les probe
@@ -298,9 +335,10 @@
       - etc...
   - Les API et les archtectures d'OS
     - système de linux:
-       - inotify
+       - inotify, fanotify
        - timerfd
        - signalfd
+       - eventfd
        - Gestion des utilisateurs
        - Gestion de l'heure
        - Gestion des fichier
