@@ -9,20 +9,29 @@
 %     - Jérôme Pouiller <jezz@sysmic.org>
 %
 
-\section{La compilation}
+\part{La création d'executables}
 
+\begin{frame}
+  \partpage
+\end{frame}
+
+\begin{frame}
+  \tableofcontents[currentpart]
+\end{frame}
+
+%% A reformuler, revoir
 \subsection{Exemple}
 
-\begin{frame}[fragile=singleslide]{Notre premier programme}{\file{hello.c}}
+\begin{frame}[fragile=singleslide]{Un programme}{\file{hello.c}}
   \embedfile{samples/hello/hello.c}
   \lstinputlisting[language=c,lastline=15]{samples/hello/hello.c}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Notre premier programme}{\file{hello.c}}
+\begin{frame}[fragile=singleslide]{Un programme}{\file{hello.c}}
   \lstinputlisting[language=c,firstline=16]{samples/hello/hello.c}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Notre premier programme}{\file{hello.h}}
+\begin{frame}[fragile=singleslide]{Un programme}{\file{hello.h}}
   \embedfile{samples/hello/hello.h}
   \lstinputlisting[language=c]{samples/hello/hello.h}
 \end{frame}
@@ -39,82 +48,90 @@ Hello World
 
 \subsection{Fonctionnement de la compilation}
 
-\begin{frame}[fragile=singleslide]{ Le format ELF}
-  \begin{itemize} 
+\begin{frame}[fragile=singleslide]{Le format ELF}
+  \begin{itemize}
   \item La  plupart des fichiers  manipulés par le compilateur  et les
     outils associés sont au format ELF
-  \item Ce format est une serie de sections et de tables
-  \item  Certaines sections section seront chargée en mémoires
+  \item Ce format est une série de sections et de tables
+  \item  Certaines sections seront chargée en mémoires
   \item  Certaines  section  demande  à etre  simplement  allouées  en
     mémoire
-  \item  \emph{objdump(1)} permet  d'obtenir des  informations  que un
+  \item  \man{objdump(1)} permet  d'obtenir des  informations  que un
     fichier ELF
-  \item  \emph{objcopy(1)}  permet   d'extraire  des  sections  ou  de
+  \item  \man{objcopy(1)}  permet   d'extraire  des  sections  ou  de
     modifier un fichier au format ELF
-  \item \emph{readelf(1)}  et \emph{nm(1)}, mais  \c{objdump} contient
-    toute leur fonctionnalités
-  \end{itemize} 
+  \item \man{readelf(1)}  et \man{nm(1)}, mais  \cmd{objdump} contient
+    toute leurs fonctionnalités
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{La compilation}
   La compilation:
-  \begin{itemize} 
-  \item  Execute  le  préprocesseur  (fichier \c{.i})  Le  compilateur
+  \begin{itemize}
+  \item Execute le préprocesseur (fichier \file{.i}), puis le compilateur
     vérifie  la syntaxe,  le typage,  converti le  code  en assembleur
-    (fichier \c{.s}) puis en code objet (fichier \c{.o})
-  \item L'option \c{-c} est utilisé.
+    (fichier \file{.s}) puis en code objet (fichier \file{.o})
+  \item L'option \file{-c} est utilisé.
   \item Le compilateur doit connaitre les signature des fonction (afin
     de vérifier correctement le typage).
-  \item Les  fichiers header  (fichiers \c{.h}) sont  nécessaires pour
+  \item Les  fichiers headers  (fichiers \file{.h}) sont  nécessaires pour
     cette phase
-  \item  \c{-I} permet  de  spécifier des  chemins supplémentaires  où
-    rechercher des fichiers headers (par défaut: \c{/usr/include})
+  \item  \file{-I} permet  de  spécifier des  chemins supplémentaires  où
+    rechercher des fichiers headers (par défaut: \file{/usr/include})
   \item Si un fichier est  inclu entre double-quotes, il est recherché
     dans le même répertoire que le source.
-  \item \c{-Wall}, \c{-Wextra} recommandés
-  \item \c{-DMACRO} peut etre utilisé
+  \item \cmd{-Wall}, \cmd{-Wextra} recommandés
+  \item \cmd{-DMACRO} peut etre utilisé
   \end{itemize}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Les symboles de debug}
   \begin{itemize}
-  \item \c{-g} permet d'ajouter  une section contenant des symboles de
+  \item \cmd{-g} permet d'ajouter  une section contenant des symboles de
     debug.
   \item  Utilisé  spar les  debuggueur  pour  donner des  informations
     supplémentaire ou pour faire le lien avec les sources.
-  \item Cette section n'est pas chargée en mémoire. 
+  \item Cette section n'est pas chargée en mémoire.
   \item Le format utilisé s'apeller \emph{dwarf} (Debug with Arbitrary
     Record Format).
-  \item L'option -g ne change pas le code généré:
+  \item L'option \cmd{-g} ne change pas le code généré:
     \begin{lstlisting}
 $ gcc -g -c main.c -o main-dbg.o
 $ gcc -c main.c -o main-rel.o
 $ ls -l
--rw-rw-r-- 1 jezz jezz    2125 Aug  3 16:05 main-rel.o
--rw-rw-r-- 1 jezz jezz    3720 Aug  3 16:05 main-dbg.o
+-rw-rw-r-- jpo jpo 2125 Aug 3 16:05 main-rel.o
+-rw-rw-r-- jpo jpo 3720 Aug 3 16:05 main-dbg.o
 $ strip *.o
 $ ls -l
--rw-rw-r-- 1 jezz jezz    2096 Aug  3 16:05 main-rel.o
--rw-rw-r-- 1 jezz jezz    2096 Aug  3 16:05 main-dbg.o
-    \end{lstlisting} 
+-rw-rw-r-- jpo jpo 2096 Aug 3 16:05 main-rel.o
+-rw-rw-r-- jpo jpo 2096 Aug 3 16:05 main-dbg.o
+    \end{lstlisting}
   \end{itemize}
+\end{frame}
+
+\subsection{Edition de liens}
+
+\begin{frame}[fragile=singleslide]{Inlining}
   Le compilateur peut effectuer quelques optimisations:
-  \begin{itemize}  
+  \begin{itemize}
   \item Les  fonction et les  variables marquées \c{static}  ne seront
     pas exportés, et donc, pas utilisé par les autres fichier objets.
   \item  Le compilateur peut décider d'\emph{inliner} ces fonctions
   \item Si toutes les appels à une fonctions statique ont été inlinés,
     il peut supprimer la fonction du fichier objet.
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{L'édition de liens}
-  \begin{itemize} 
-  \item  Le compilo  ne connait  pas  forcement les  addresses des
+  \begin{itemize}
+  \item  Le compilateur  ne connait  pas forcement  les  addresses des
     fonctions et des variables globale marquées \c{extern}
   \item  Les endroits  ayant  besoin de  ces fonctions/variables  sont
     remplacés par  des 0 et une  entrée est ajoutée dans  la table des
-    \emph{relocation} du fichier objet (cf. \c{objdump -R})
-  \item On  appelle le \c{linker} (\c{gcc} sans  l'option \c{-c}) pour
+    \emph{relocation} du fichier objet (cf. \cmd{objdump -R})
+  \item On  appelle le \emph{linker} (\c{gcc} sans  l'option \c{-c}) pour
     résoudre les symboles
-  \item Le linker connait toutes les fonctions, et toutes les table de
+  \item Le linker connait toutes les fonctions, et toutes les tables de
     relocation.
   \item Il peut déplacer les  addresses de chargement des fonctions et
     des variables de  manière à les mettre au  plus près des fonctions
@@ -123,100 +140,124 @@ $ ls -l
   \item Une  fois l'agencement des fonctions défini,  le linker résoud
     toutes les entrées des tables de relocations
   \end{itemize}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Les bibliothèques}
-  \begin{itemize} 
+  \begin{itemize}
   \item  Afin de  simplifier  le déploiment  des  utilitaires, il  est
     possible  d'empaqueter  un  ensemble  de fichier  objet  dans  une
-    bibliothèque dite statique (fichier .a). cf. \emph{ar(1)}.
+    bibliothèque dite statique (fichier \file{.a}). cf. \man{ar(1)}.
   \item Dans ce cas, cela ne change rien à la procedure de link
   \item Il  est aussi possible d'utiliser  des biliothèques dynamiques
-    (fichier .so). Nous y reviendrons.
-  \item L'usage de bibliothèques dynamique permet:
-    \begin{itemize} 
-    \item de ne charger qu'un  exemplaire de la bibliothèque pour tout
-      le système
-    \item de simplifier la redistribution du programme
-    \item de simplifier les mises à jour de la bibliothèque
-    \end{itemize} 
-    % A revoir, il faut peut-etre mettre ces trois points autre part
+    (fichier \file{.so}). Nous y reviendrons.
   \item  Il  est  possible  de  spécifier  le  chemin  complet  de  la
     bibliothèque (dynamique ou statique)  ou de laisser le compilateur
-    la trouver  automatiquement avec  la syntaxe \c{-lbrary}.  On peut
+    la trouver  automatiquement avec  la syntaxe \cmd{-lbrary}.  On peut
     dans ce cas lui précisier des chemins supplémentaire ou rechercher
-    la bibliothèque avec \c{-L}
+    la bibliothèque avec \cmd{-L}
   \item  Par  défaut,  le  compilateur  recherchera  les  bibliothèques
-    dynamiques, sauf si l'option \c{-static} est utilisée
+    dynamiques, sauf si l'option \cmd{-static} est utilisée
   \item  Le  linker suit  en  fait  une  des recettes  contenues  dans
-    \c{/usr/lib/ldscripts/}  (en  fonction   des  options  passées  au
+    \file{/usr/lib/ldscripts/}  (en fonction  des  options passées  au
     linker).   Il   est  possible  de  fabriquer   son  propre  format
-    (\c{ld -T}) (utile pour générer des firmwares).
-  \item Problème:  les fichiers objets des  bibliothèques statiques et
-    dynamique ne se compilent pas  avec les mêmes options et certaines
-    architectures ne permettent  pas les bilbiothèques dynamiques.  La
-    création  de  bibliothèque portable  peut  devenir  un vrai  casse
-    tête. libtool est outil permettant de faciliter ce travail.
+    (\cmd{ld -T}) (utile pour générer des firmwares).
   \end{itemize}
-\end{frame} 
+\end{frame}
 
- \begin{frame}[fragile=singleslide]{  Les bibliothèques dynamiques}
-  \begin{itemize} 
-  \item Coté bibliothèque:
-    \begin{itemize} 
-    \item Elle  contient une  table des symboles  exportés et  de leur
-      emplacement (dans la table \emph{.dynsym})
-    \item A  la construction, elle  doit être linkée  avec \c{-shared}
-      pour indiquer que sont  chargement sera différent d'un programme
-      standard (principalement, aucune fonction main n'est nécessaire)
-    \end{itemize} 
-  \item Coté éxecutable:
-    \begin{itemize} 
-    \item Le linker va ajouter une table d'indirection (la \emph{.got}
-      \emph{Global Offset  Table}) pour tous les  symboles se trouvant
-      dans des bibliothèques
-    \item Le  linker doit passer  par cette indirection  pour appeller
-      une fonction exportée par une biliothèque dynamique.
-    \item  Il  ne   peut  pas  faire  tenir  ce   morceau  de  code  à
-      l'emplacement laissé par le compilateur
-    \item Il crée donc un petit morceau de code qu'il placera dans une
-      section \emph{Procedure Linkage Table} (\emph{.plt})
-    \item Cette procedure permet  simplement de brancher vers la table
-      d'indirection.
-    \end{itemize} 
-  \item A l'éxécution
-    \begin{itemize} 
-    \item Un interpreteur (normalement \c{/lib/ld.so}) est appellé
-    \item il  charge les  bibliothèques nécessaires (inscrites  dans la
-      table \emph{.dynamic}) en mémoire
-    \item  Il remplit  la GOT  avec  des pointeurs  vers une  fonction
-      permettant la résolution du symbole.
-    \item  Lorsque  ce symbol  est  appellé  la  première fois,  cette
-      fonction est appellée.
-    \item La fonction résoud le symbol et place son adresse dans la GOT
-    \item Cette méthode s'appelle \emph{lazy resolving}
-    \item   Cela  peut   être   désactivé  en   passant  la   variable
-      d'environnement \c{LD_BIND_NOW}
-    \end{itemize} 
+\begin{frame}[fragile=singleslide]{Libtool}
+  Problème:
+  \begin{itemize}
+  \item Les  fichiers objets des bibliothèques  statiques et dynamique
+    ne se compilent pas avec les mêmes options
+  \item  Certaines architectures ne  permettent pas  les bibliothèques
+    dynamiques
+  \item La  création de bibliothèques  portables peut devenir  un vrai
+    casse tête
+  \end{itemize}
+  \emph{libtool} est outil permettant de faciliter ce travail.
+\end{frame}
+
+\subsection{Les bibliothèques dynamiques}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  L'usage de bibliothèques dynamique permet:
+  \begin{itemize}
+  \item de ne charger qu'un exemplaire de la bibliothèque pour tout le
+    système
+  \item de simplifier la redistribution du programme
+  \item de simplifier les mises à jour de la bibliothèque
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  Coté bibliothèque:
+  \begin{itemize}
+  \item  Elle contient  une table  des  symboles exportés  et de  leur
+    emplacement (dans la table \emph{.dynsym})
+  \item A  la construction, elle  doit être linkée  avec \cmd{-shared}
+    pour indiquer  que sont  chargement sera différent  d'un programme
+    standard (principalement, aucune fonction main n'est nécessaire)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  Coté éxecutable:
+  \begin{itemize}
+  \item Le  linker va ajouter une table  d'indirection (la \emph{.got}
+    \emph{Global  Offset Table})  pour tous  les symboles  se trouvant
+    dans des bibliothèques
+  \item Le linker doit passer  par cette indirection pour appeller une
+    fonction exportée par une biliothèque dynamique.
+  \item Il ne peut pas faire  tenir ce morceau de code à l'emplacement
+    laissé par le compilateur
+  \item Il crée  donc un petit morceau de code  qu'il placera dans une
+    section \emph{Procedure Linkage Table} (\emph{.plt})
+  \item Cette  procedure permet simplement  de brancher vers  la table
+    d'indirection.
+    \begin{lstlisting}
+$ objdump -d | grep -A 10 "section \.plt"
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  A l'éxécution
+  \begin{itemize}
+  \item Un interpreteur (normalement \file{/lib/ld.so}) est appellé
+  \item  Il charge  les bibliothèques  nécessaires (inscrites  dans la
+    table \emph{.dynamic}) en mémoire
+  \item  Il  remplit la  GOT  avec  des  pointeurs vers  une  fonction
+    permettant la résolution du symbole.
+  \item Lorsque ce symbol est appellé la première fois, cette fonction
+    est appellée.
+  \item La fonction résoud le symbol et place son adresse dans la GOT
+  \item Cette méthode s'appelle \emph{lazy resolving}
+  \item   Cela   peut   être   désactivé  en   passant   la   variable
+    d'environnement \cmd{LD_BIND_NOW}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  \begin{itemize}
   \item Il est possible de  demander le chargement manuel et dynamique
     des    bibliothèques    et    des    symboles    avec    \c{libdl}
-    (\emph{dl\_open(3)}, \emph{dl\_sym(3)})
-  \item Afin d'accélérer le  chargement, \c{ld.so} utilise un index de
+    (\man{dl\_open(3)}, \man{dl\_sym(3)})
+  \item Afin d'accélérer le  chargement, \file{ld.so} utilise un index de
     bibliothèques présentes  sur le  système.
   \item  Lorsque vous  ajoutez une  bibliothèque, vous  devez appeller
-    \emph{ldconfig(1)} pour mettre à jour ce cache.
-  \item la variable \c{LD_LIBRARY_PATH}  permet d'ajouter un chemin de
-    recherche de biliothèque pour \c{ld.so}.
-  \end{itemize} 
-\end{frame} 
+    \man{ldconfig(1)} pour mettre à jour ce cache.
+  \item la variable \cmd{LD_LIBRARY_PATH}  permet d'ajouter un chemin de
+    recherche de biliothèque pour \file{ld.so}.
+  \end{itemize}
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Utilisation de \c{LD_PRELOAD}}
-  \begin{itemize} 
-  \item La vaiable d'envionnement \c{LD_PRELOAD} permet de demander le
-    chargement d'une bibliothèque avant  les las autres
+  \begin{itemize}
+  \item La  variable d'envionnement \c{LD_PRELOAD}  permet de demander
+    le chargement d'une bibliothèque avant les autres
   \item Les symboles exportées par celle-ci seront prioritaires.
   \item Exemple:
-    \begin{lstlisting} 
+    \begin{lstlisting}
 unsigned int sleep(unsigned int s) {
     static unsigned int (*real_sleep)(unsigned int s) = NULL;
 
@@ -227,40 +268,42 @@ unsigned int sleep(unsigned int s) {
     return real_sleep(s);
 }
     \end{lstlisting}
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
+
+% Section: Redistribution? A deplacer apres les outils de compilation?
 
 \begin{frame}[fragile=singleslide]{A qui fournir quoi?}
   \begin{itemize}
   \item La poubelle
-    \begin{itemize} 
-    \item Les dependance
+    \begin{itemize}
+    \item Les dependances
     \item Les objets (ELF)
-    \end{itemize} 
-  \item Les sources:
-    \begin{itemize} 
+    \end{itemize}
+  \item Les sources
+    \begin{itemize}
     \item Les sources
     \item Les headers
     \item Le système de compilation
-    \end{itemize} 
+    \end{itemize}
   \item Les developpeurs externes
-    \begin{itemize} 
+    \begin{itemize}
     \item Les headers
-    \item Les bibliothèque statique (archve crée avec \emph{ar(2)})
-    \end{itemize} 
+    \item Les bibliothèque statique (archve crée avec \man{ar(2)})
+    \end{itemize}
   \item L'utilisateur final
-    \begin{itemize} 
+    \begin{itemize}
     \item Les bibliothèque dynamique (ELF)
     \item Les binaires (ELF)
-    \end{itemize} 
-  \end{itemize} 
-\end{frame} 
+    \end{itemize}
+  \end{itemize}
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Identifier le résultat}
   Un bon moyen de reconnaitre  les binaires est d'utiliser la commande
-  \emph{file(1)}:
+  \man{file(1)}:
   \begin{lstlisting}
-host$ file */hello
+host$ file ...
 hello-dyn:        ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.15, not stripped
 hello-static: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically linked, for GNU/Linux 2.6.15, not stripped
 /lib/x86_64-linux-gnu/librt-2.15.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, stripped
@@ -268,19 +311,20 @@ hello-static: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statical
 \end{lstlisting} %$
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{redistribution et licences}
-  \begin{itemize} 
+\begin{frame}[fragile=singleslide]{Redistribution et licences}
+  \begin{itemize}
   \item GPL. Est-ce du travail dérivé?
-    \begin{itemize} 
+    \begin{itemize}
     \item Le resultat d'un copier-coller?
     \item Une compilation statique?
     \item Une compilation dynamique?
-    \end{itemize} 
+    \end{itemize}
   \item LGPL
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
 
+% A placer au debut de la section compilation
 \begin{frame}[fragile=singleslide]{Règle d'or}
   \begin{center}
     \huge{Jamais d'espaces dans les chemins de compilation}
@@ -316,8 +360,8 @@ host$ make CC=arm-linux-gcc CFLAGS=-Wall
   Testons:
 \begin{lstlisting}
 host$ cd build
-host$ make -f ../Makefile VPATH=.. CC=arm-linux-gcc 
-\end{lstlisting} %$  
+host$ make -f ../Makefile VPATH=.. CC=arm-linux-gcc
+\end{lstlisting} %$
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Créer un projet sans autotools}
@@ -337,7 +381,7 @@ host$ make -f ../Makefile VPATH=.. CC=arm-linux-gcc
 
 \begin{frame}[fragile=singleslide]{Créer un projet sans autotools}
   Nous pouvons  ajouter des alias  pour nous aider dans  les commandes
-  complexes 
+  complexes
   \lstinputlisting[firstline=11]{samples/hello/Makefile.5}
   \note[item]{TODO: Ajouter des \#ifdef CONFIG pour faire dans Kconfig}
   \note[item]{Parler de apt-get source (-b), dpkg -L, dpkg -l, dpkg-buildpackage}
@@ -403,7 +447,7 @@ host$ head config.log
 \begin{frame}[fragile=singleslide]{Créer un projet avec autotools}
   Fonctionnement des autotools:
   \begin{itemize}
-  \item Préparation 
+  \item Préparation
 \begin{lstlisting}
 % apt-get install automake autoconf
 \end{lstlisting}
@@ -481,7 +525,7 @@ $ make install
 \begin{frame}[fragile=singleslide]{Créer un projet avec autotools}
   Si \cmd{automake}  est appellé avec  \verb+-gnits+, \verb+distcheck+
   effectue des vérification supplémentaires sur la documentation,
-  etc... 
+  etc...
   \\[2ex]
   La fonctionnalité \verb+distcheck+ est  le point fort souvent énoncé
   des autotools.
@@ -502,7 +546,7 @@ $ tar tvzf hello-1.0.tar.gz
   \item Système de compilation du noyau
   \item Très bien adapté à la cross-compilation
   \item Pour configurer les options:
-    \begin{itemize}    
+    \begin{itemize}
     \item En ncurses
 \begin{lstlisting}
 host% apt-get install libncurses5-dev
@@ -568,7 +612,6 @@ host$ make ARCH=arm CROSS_COMPILE=arm-linux- O=build defconfig
 \begin{lstlisting}
 host% apt-get install libncurses5-dev
 host$ make ARCH=arm CROSS_COMPILE=arm-linux- O=build menuconfig
-# Supprimer inetd et le support NFS
 \end{lstlisting} %$
   \end{itemize}
 \end{frame}
@@ -578,7 +621,7 @@ host$ make ARCH=arm CROSS_COMPILE=arm-linux- O=build menuconfig
   \begin{itemize}
   \item Compilation
 \begin{lstlisting}
-host$ make ARCH=arm CROSS_COMPILE=arm-linux- 
+host$ make ARCH=arm CROSS_COMPILE=arm-linux-
 \end{lstlisting} %$
   \item Installation
 \begin{lstlisting}
@@ -587,9 +630,60 @@ host$ make ARCH=arm CROSS_COMPILE=arm-linux- install
   \end{itemize}
 \end{frame}
 
+\subsection{A base de Cmake}
 
-\subsection{A base de cmake}
-Aucune des solution précédante ne fonctionne sur les OS non posix (rappel: Cygwin = Couche posix pour Windows)
+\begin{frame}[fragile=singleslide]{Cmake}
+  \begin{itemize}
+  \item Aucune des  solution précédentes ne fonctionne sur  les OS non
+    posix (rappel: Cygwin = Couche posix pour Windows)
+  \item Cmake ressemble à Automake + Autoconf
+  \item Un fichier (CMakeLists.txt) décrit la compilation
+    \begin{lstlisting}
+cmake_minimum_required (VERSION 2.6)
+project (HELLO)
+add_executable (hello hello.c)
+    \end{lstlisting}
+  \item Cmake génère des fichiers  pour les différent types de système
+    de compilation: Makefile, XCode, projet VisualStudio, etc...
+    \begin{lstlisting}
+$ mkdir build
+$ cd build
+$ ccmake ..
+$ make
+    \end{lstlisting}
+\end{itemize}
+\end{frame}
 
+\begin{frame}[fragile=singleslide]{Cmake}
+  Points positifs:
+  \begin{itemize}
+  \item Portabilité
+  \item Syntaxe cohérente (c'est loin d'être le cas de Makefile)
+  \item Extensible
+  \item  Son  abstration permet  une  prise  en  main facile  pour  un
+    débutant
+  \end{itemize}
+  Sa portabilité rend le niveau d'abstraction de Cmake assez élevé:
+  \begin{itemize}
+  \item Peut dérouter les habitués
+  \item Processus de compilation  complexe à debugguer (c'est aussi le
+    cas d'Autotools)
+  \item  Faible intégration  avec  les système  de compilation  natifs
+    (contrairement à Autotools)
+  \item  Certaine action  simple nativement  peuvent  devenir complexe
+    dans Cmake
+  \item  Nécessite d'installer  cmake  sur la  machine de  compilation
+    (Contrairement à Autotools/Kmake)
+  \end{itemize}
+\end{frame}
 
-
+\begin{frame}[fragile=singleslide]{Que choisir?}
+  \begin{itemize}
+  \item  Projet nécessitant  une  bonne integration  avec les  système
+    Posix et avec les système Microsoft: Cmake
+  \item  Petit  projet, avec  redistribution  restreinte: Makefile  ou
+    CMake
+  \item Petit projet, mais redistribution large: Autotools
+  \item Gros projet de forte complexité: Kmake
+  \end{itemize}
+\end{frame}

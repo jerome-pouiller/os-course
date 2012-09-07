@@ -1,4 +1,4 @@
-%                                                                                                               
+%
 % This document is available under the Creative Commons Attribution-ShareAlike
 % License; additional terms may apply. See
 %   * http://creativecommons.org/licenses/by-sa/3.0/
@@ -12,26 +12,26 @@
 \part{Le multitâches}
 
 \begin{frame}
-  \partpage
+\partpage
 \end{frame}
 
 \begin{frame}
-  \tableofcontents[currentpart]
+\tableofcontents[currentpart]
 \end{frame}
 
 \section{Le temps partagé}
 
 \begin{frame}{Concurence}
-  \begin{itemize}
-  \item   Des    tâches   concurentes   sont    des   tâches   éxécutées
-    séquentiellement sur un seul processeur en entrelacant l'éxécution
-    de chaque tâches
+\begin{itemize}
+\item   Des    tâches   concurentes   sont    des   tâches   éxécutées
+séquentiellement sur un seul processeur en entrelacant l'éxécution
+de chaque tâches
   \item  Pour les tâches,  le temps  partagé est  transparent.  Chaque
     tâche à l'impression d'avoir le CPU pour elle-seule
   \item  On  trouvera aussi  le  terme  de  \emph{multitâches} ou  de
     \emph{temps partagé}
   \end{itemize}
-\end{frame} 
+\end{frame}
 
 \begin{frame}{Concurence}
    La programmation concurente N'EST  PAS de la programmation parallèle
@@ -57,8 +57,8 @@ int main() {
     // Child
   }
 }
-\end{lstlisting} 
-\end{frame} 
+\end{lstlisting}
+\end{frame}
 
 \begin{frame}{Concurence}
   Migration d'un système avec gestion asynchrone des interruptions vers
@@ -66,25 +66,25 @@ int main() {
   \begin{center}
     \pgfimage[width=10cm]{pics/model_multitask}
   \end{center}
-\end{frame} 
+\end{frame}
 
-\begin{frame}{tâches concurentes}
+\begin{frame}{Tâches concurentes}
   Pour les  systèmes plus complexes ou pour  facilité la réutilisation,
   un   système   multitâche   est   plus   approprié   qu'un   système
   \emph{Foreground/Background}.
-  \begin{itemize} 
+  \begin{itemize}
   \item Facilite la gestion des évènements
   \item Permet de prioriser les traitements
-  \end{itemize} 
+  \end{itemize}
   \note{Parler  des différentes  états des  tâches ici.  Il  manque un
     slide avec du code.}
-\end{frame} 
+\end{frame}
 
 \begin{frame}{Etats des tâches}
   \begin{center}
     \input{pics/task_states}
   \end{center}
-\end{frame} 
+\end{frame}
 
 
 \subsection{Changement de contexte}
@@ -92,21 +92,21 @@ int main() {
 \begin{frame}{Le changement de contexte}
   Chaque tâche possède une pile en mémoire. Une liste globale contient:
   \note{Faire un schema}
-  \begin{itemize} 
+  \begin{itemize}
   \item les états de toutes les tâches
   \item l'emplacement de la pile en mémoire
   \item le contexte d'éxecution, c'est-à-dire une sauvegarde des registres
-  \end{itemize} 
+  \end{itemize}
   Lors du changement de contexte
-  \begin{itemize} 
+  \begin{itemize}
   \item  on  sauvegarde  le   contexte  de  la  tâche  précédente,  en
     particulier son pointeur de pile et son pointeur d'instruction
   \item on restaure le contexte de la nouvelle tâche
   \item on restore le pointeur d'instruction
-  \end{itemize} 
+  \end{itemize}
   Dans  la pratique, il  y a  des petites  subtilités dependant  de la
   manière dont le changement de contexte à été amené.
-\end{frame} 
+\end{frame}
 
 \begin{frame}{Le changement de contexte}
   \begin{center}
@@ -131,7 +131,7 @@ int main() {
 \end{frame}
 
 \begin{frame}{Multitâche non-préemptif}
-  \begin{enumerate} 
+  \begin{enumerate}
   \item  Une tâche  non prioritaire  est en  cours d'éxecution  et est
     interrupue par un évènement (une IRQ)
   \item L'ISR est appellé
@@ -143,8 +143,8 @@ int main() {
     appelle \texttt{schedule}
   \item L'ordonnanceur donne la main à la tâche de forte priorité
   \item La tâche de haute priorité peut (enfin) s'éxécuter
-  \end{enumerate} 
-\end{frame} 
+  \end{enumerate}
+\end{frame}
 
 \begin{frame}{Multitâche préemptif}
   Un  système  multitâche préemptif  va  être  capable  de changer  de
@@ -155,7 +155,7 @@ int main() {
 \end{frame}
 
 \begin{frame}{Multitâche préemptif}
-  \begin{enumerate} 
+  \begin{enumerate}
   \item  Une tâche  non prioritaire  est en  cours d'éxecution  et est
     interrompue par un évènement (une IRQ)
   \item L'ISR est appellé
@@ -167,27 +167,27 @@ int main() {
     appelle \texttt{schedule}
   \item   Vu  qu'il  n'y   a  plus   tâche  prioritaire   à  exécuter,
     l'ordonnanceur redonne la main à la tâche de faible priorité
-  \end{enumerate} 
-\end{frame} 
+  \end{enumerate}
+\end{frame}
 
 \begin{frame}{Le changement de contexte sur interruption}
   \begin{center}
     \pgfimage[width=10cm]{pics/interuption-2}
   \end{center}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile]{Round robin}
   Examinons  le cas de  deux tâches  de priorité  égales n'effectuant
   jamais de relanchement volontaire:
-  \begin{lstlisting} 
+  \begin{lstlisting}
 task1() {
   for(;;) ;
 }
 task2() {
   for(;;) ;
 }
-  \end{lstlisting} 
-\end{frame} 
+  \end{lstlisting}
+\end{frame}
 
 \begin{frame}[fragile]{Round robin}
   Dans ce cas, si aucune interruption ne se produit, la premiere tâche
@@ -205,6 +205,8 @@ task2() {
   \end{center}
 \end{frame}
 
+
+% TODO: Section à etoffer. Il faut tout détailler
 \section{Pagination de la mémoire}
 
 \begin{frame}{La MMU}
@@ -213,17 +215,33 @@ task2() {
 
   En revanche, la mémoire est partagée entre les tâches. Ainsi, si une
   tâche A écrit par erreur sur l'espace d'une tâche B:
-  \begin{itemize} 
+  \begin{itemize}
   \item  La tâche B plante
   \item  Le problème est complexe à trouver
   \item Il  n'y a  aucune moyen  pour empêcher la  tâche A  de faire
     cette action.
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{La MMU}  
-  Les  CPU  modernes  intègrent   un  composant  appellé  MMU  (\emph{Memory
-  Management Unit}):
+\begin{frame}[fragile=singleslide]{La segmentation}
+  \begin{itemize}
+    \item Premier mécanisme de protection
+    \item On associe à des zone de mémoire des droits
+    \item Indique au CPU  que certaines zone (appellé \emph{segments})
+      de la mémoire ne doivent pas  être écrite ou ne doivent pas être
+      éxéctuées
+    \item Permet  de séparer les  données accessible en  écriture, des
+      données accéssible en lecture seule, du code.
+    \item Chaque section  section d'une biaire ELF est  chargé dans un
+      segment séparé
+    \item  De  nos  jours,  cette  méthode est  très  souvent  utilisé
+      conjointement avec la pagination
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{La pagination et la MMU}
+  Les CPU  modernes intègrent  un composant appellé  MMU (\emph{Memory
+    Management Unit}):
   \begin{itemize}
   \item  Unite de translation d'addresses mémoire
   \item  On parle d'addresses physiques et virtuelles
@@ -236,9 +254,9 @@ task2() {
   \end{itemize}
 \end{frame}
 
-\begin{frame}{La MMU (2)}  
-  \begin{itemize} 
-  \item  Il est  possible  de changer  les  associations simplement  en
+\begin{frame}{La MMU (2)}
+  \begin{itemize}
+  \item  Il est  possible de  changer les  associations  simplement en
     chargeant un pointeur sur une autre table
   \item On  défini alors une table  par tâche.  Lors  du changement de
     contexte, on change aussi de table
@@ -246,7 +264,7 @@ task2() {
     \begin{itemize}
     \item  Utilisateur
     \item  Superviseur
-    \end{itemize} 
+    \end{itemize}
   \item  Seul  le  mode  superviseur  (l'OS) permet  de  modifier  les
     associations de la MMU
   \end{itemize}
@@ -254,25 +272,25 @@ task2() {
     au  mode utilisateur  et vice  versa\\}
   \note{Vérifier  sur wikipedia  ``addresse  virtuelle'' et  ``mémoire
     paginée''}
-\end{frame} 
+\end{frame}
 
 \begin{frame}{La MMU - gestion des exceptions}
   Toutes les addresses physiques ne sont pas associées à des addresses
   virtuelles
-  \begin{itemize} 
+  \begin{itemize}
   \item Une tâche A ne peut pas accèder à la mémoire d'une tâche B
   \item Protection contre les erreurs de programmation
   \item Permet d'assurer la sécurité des systèmes multi-utilisateurs
   \item Une tâche à l'impression d'avoir toute la mémoire pour elle
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \begin{frame}{La MMU - gestion des exceptions}
-  Toutes les addresses  virtuelles ne sont pas associées  à des addresses
-  physiques
+  Toutes  les  addresses  virtuelles  ne  sont  pas  associées  à  des
+  addresses physiques
   \begin{itemize}
-  \item  Lorsqu'une  tâche accède  à  une  addresse  non associée.   Une
-    exception est déclenchée.  Cela permet  à l'OS de reprendre la main
+  \item  Lorsqu'une tâche  accède à  une addresse  non  associée.  Une
+    exception est déclenchée.  Cela permet à l'OS de reprendre la main
     et de traiter l'erreur (souvent en tuant la tâche fautive)
   \item Lorsqu'une tâche souhaite allouer de la mémoire
     \begin{itemize}
@@ -284,15 +302,77 @@ task2() {
       bloc de mémoire
     \item L'OS met à jour la MMU
     \item L'OS retourne l'addresse virtuelle
-    \end{itemize} 
-  \end{itemize} 
-\end{frame} 
+    \item cf. \man{sbrk(2)} et \man{mmap(2)}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection {Passage en mode superviseur}
+
+\begin{frame}{Passage en mode superviseur}
+  Un processus utilisateur ne peut pas passer en mode superviseur.
+
+  Comment passer en mode superviseur?
+  \begin{itemize}
+  \item Lorsqu'une interruption/exception est déclenchée
+  \end{itemize}
+
+  Comment appeller une fonction du système?
+  \begin{itemize}
+  \item  Les  tâches ont  besoin  de  faire  des demandes  au  système
+    (exemple: allouer de la mémoire)
+  \item Ces fonctions système s'appellent des \emph{appels système} ou
+    \emph{syscall} (section 2 des pages de man)
+  \item  Elles ont  très  peu de  points  communs avec  les appels  de
+    fonctions classiques
+  \item   Chaque  \emph{syscall}   est   associé  à   un  numéro   (cf
+    \file{sys/syscall.h} \file{asm/unistd\_32.h}, \man{syscalls(2)})
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Passage en mode superviseur}
+  Pour utiliser les \emph{appels systèmes} (cf. \man{syscall(2)}):
+  \begin{itemize}
+  \item On place les arguments sur la pile
+  \item On place le numéro de l'interruption sur la pile
+  \item On déclenche une interruption logicielle (\c{int 0x80})
+  \item  Le  CPU  passe  en  mode  superviseur  et  appelle  l'ISR  de
+    l'interruption
+  \item L'OS prend  la main, regarde le premier element  de la pile et
+    appelle la fonction correspondante (\file{asm-generic/unistd.h})
+  \end{itemize}
+  Il  existe maintenant des  instructions spéciales  sur les  CPU pour
+  optimiser    les    \emph{syscall}    (instructions    \c{sysenter},
+  \c{sysexit})
+\end{frame}
 
 \section{Optimisation possible grace à la MMU}
 
+\subsection{Les segfaults}
+
+\begin{frame}{Gestion de la mémoire}
+  Gestion des droits sur les pages
+  \begin{itemize}
+  \item    Il    est     possible    d'affecter    des    droits    en
+    lecture/écriture/éxécution sur les pages gérées par la MMU
+  \item Si la tâche essaye d'écrire sur une page contenant des données
+    constantes, il s'agit d'un bug et une exception est levée
+  \item  On garantie  que  les pages  \emph{read-only}  ne seront  pas
+    modifiées
+  \item Une page contenant des données constantes (donné ou code) peut
+    être mappée dans plusieurs tâches différentes
+  \item En retirant les droits  en éxecution sur les pages de données,
+    on améliore la sécurité du système (impossible d'exécuter une page
+    contenant des données)
+  \item Une  page accessible  en écriture peut  être mappée  dans deux
+    tâches afin de leur permettre de partager des données
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{La MMU - gestion des exceptions}
   Le MMU permet à l'OS de mieux utiliser la mémoire:
-  \begin{itemize} 
+  \begin{itemize}
   \item  L'OS peut  donner  des espaces  d'addressage virtuel  contigu
     alors que la mémoire physique est fractionnée
   \item Le système n'alloue jamais la plage $[0, 1024]$
@@ -303,13 +383,43 @@ task2() {
     \item En dehors des pointeurs,  les nombres que l'on manipule sont
       très  souvent <  1024.   Ce système  nous  permet de  rapidement
       repérer des casts abusifs entre des integers et des pointeurs
-    \end{itemize} 
+    \end{itemize}
   \item ``Sun a inventé le SegFault''
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Gestion de la mémoire}
-  Retarder l'association:
+\begin{frame}[fragile=singleslide]{Context Swap, cache et MMU}
+  \begin{itemize}
+  \item  Le  MMU est  associé  à  un  cache appellé  TLB  (Translation
+    lookaside buffer)
+  \item  Lorsqu'une  tache tente  d'accéder  à  une  addresse, le  MMU
+    regarde  le TLB,  si il  trouve l'addresse,  elle  est directement
+    traduite (\emph{TLB hit})
+  \item  Sinon,   il  est  nécessaire   de  traverser  la   table  des
+    pages.  Cette  opération  peut   couter  une  centaine  de  cycles
+    d'horloge.
+  \item Il existe deux mode de fonctionnement du TLB:
+    \begin{itemize}
+    \item Automatique: Le MMU parcours automatique la table des pages
+    \item  Manuel: Une  execption  est déclenchée.   L'OS parcourt  la
+      table, met à jour le TLB et rend la main.
+    \end{itemize}
+  \item Dans  le cas d'un  système multiprocessus, le  mappping change
+    lorsque l'on passe d'une tache à l'autre
+    \begin{itemize}
+    \item  Certains systèmes nécessibtent  d'invalider la  totalité du
+      TLB
+    \item  D'autre permettent  d'associer  un numéro  de  tâche à  une
+      entrée  du TLB. Ainsi,  lorsque la  tâche précédente  reprend la
+      main, ses entrées dans le TLB sont encore valides
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection{Overcommit}
+
+\begin{frame}{Overcommit}
+  Principe de l'overcommit:
   \begin{itemize}
   \item Une tâche demande une allocation
   \item Le système  enregistre la demande dans le  Memory Manager mais
@@ -323,10 +433,17 @@ task2() {
   \item Il rend la main à la tâche
   \item Tout est transparent pour la tâche
   \end{itemize}
+  Voir             \file{/proc/sys/vm/overcommit\_memory}            et
+  \file{/proc/sys/vm/overcommit\_memory}
 \end{frame}
 
-\begin{frame}{Gestion de la mémoire}
-  Utilisation de la Swap:
+\subsection{La Swap}
+
+\begin{frame}{La swap}
+  \begin{itemize}
+  \item La  swap est une partie  de la mémoire de  masse utilisée pour
+    stockée des données de la mémoire RAM
+  \item Utilisation de la Swap:
   \begin{itemize}
   \item Lorsque le système n'a plus assez de mémoire
   \item Il choisit une page physique qu'il copie sur le disque dur
@@ -341,124 +458,205 @@ task2() {
   \item L'OS rend la main à la tâche
   \item Tout est transparent pour la tâche
   \end{itemize}
+\item Voir \file{/proc/sys/vm/swappiness}
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Gestion de la mémoire}
-  Gestion des droits sur les pages
+\begin{frame}[fragile=singleslide]{Compression de la mémoire}
+  Compression de la mémoire
   \begin{itemize}
-  \item    Il    est     possible    d'affecter    des    droits    en
-    lecture/écriture/éxécution sur les pages gérées par la MMU
-  \item Si la tâche essaye d'écrire sur une page contenant des données
-    constantes, il s'agit d'un bug et une exception est levée
-  \item  On garantie  que  les pages  \emph{read-only}  ne seront  pas
-    modifiées
-  \item Une page contenant des  données constantes (donné ou code) peut
-    être mappée dans plusieurs tâches différentes
-  \item En retirant les droits  en éxecution sur les pages de données,
-    on améliore la sécurité du système (impossible d'exécuter une page
-    contenant des données)
-  \item Une  page accessible  en écriture peut  être mappée  dans deux
-    tâches afin de leur permettre de partager des données
-  \end{itemize} 
+  \item  Mécanisme remplacant  la  swap sur  les  système dépourvu  de
+    mémoire  de   masse  (ou  mémoire  de  masse   limités  en  nombre
+    d'écritures)
+  \item  Au lieu  de copier  les page  que un  disque, les  pages sont
+    compressés
+  \item Mis  à part les  heuristiques utilisée, le  fonctionnement est
+    identique
+  \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile=singleslide]{\c{mlock}                     et
+  \c{mlockall}}
+  \begin{itemize}
+  \item Les  fonctions systèmes \c{mlock}  et \c{mlockall}
+    permettent  de  demander  à  Linux  de garder  des  pages  (ou  la
+    totalité en mémoire)
+  \item Elle empâche ainsi l'utilisation de l'overcommit et du swap.
+  \item  Il ne  faut pas  oublier d'allouer  une pile  suffisante avant
+    d'appeller \c{mlockall}
+    \note{Ajouter du code à ce sujet}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Utilisation de \c{mlock}}
+\begin{lstlisting}
+#include <sys/mman.h>
+
+void alloc_stack_1k() {
+  char t[1024];
+}
+
+int main() {
+  alloc_stack_1k();
+  mlockall(MCL_CURRENT | MCL_FUTURE);
+}
+\end{lstlisting}
+\end{frame}
+
+\subsection{Mapping des fichiers en mémoire}
 
 \begin{frame}{Gestion de la mémoire}
   Simplification des accès au IO
-  \begin{itemize} 
-  \item La tâche demande de mapper un fichier en mémoire
+  \begin{itemize}
+  \item   La  tâche   demande  de   mapper  un   fichier   en  mémoire
+    (\man{mmap(2)})
+  \item cf. \file{/proc/*/maps}
   \item  Le système  alloue un  espace d'adressage  virtuel égal  à la
     taille du fichier
   \item Le fichier en lui même n'est pas chargé en mémoire
   \item Lorsque la  tâche accès à un espace  du fichier, une exception
     est levée et la page demandée est chargée de manière tranparente
-  \item Le  système marque la  page comme Read-Only. Lorsque  la tâche
-    tente d'écrire dans la page,  une exception est levée, la page est
-    marquée \emph{dirty}  , les  droits en écriture  sont données  et le
-    système rend la main
-  \item Lorsque  le système  à besoin de  mémoire, il peut  écrire les
-    pages modifiées sur le disque et décharger la page de la mémoire
-  \item Lorsqu'une  tâche demande un fichier deja  présent en mémoire,
-    on map simplement la MMU sur  la page déjà présente (il faut alors
-    gérer correctement le marquage \emph{dirty} de la page)
-  \item  cf.   champ  \emph{buffer}  et \emph{cache}  de  la  commande
-    \texttt{free}
+  \item cf. champ RSS de \file{/proc/*/smaps}
   \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile=singleslide]{Les pages dirty}
+  La marque \emph{Dirty}
+  \begin{itemize}
+  \item Quelques  soit la demande de l'utilisateur,  le système marque
+    les page associés à des fichier comme Read-Only.
+  \item  Ainsi, lorsque  la tâche  tente  d'écrire dans  la page,  une
+    exception est levée
+  \item  La  page est  alors  marquée  \emph{dirty}  , les  droits  en
+    écriture sont données et le système rend la main
+  \item Le système sait que  cette page devra être synchronisé avec la
+    mémoire de masse
+  \item Le système peut repousser cette opération
+  \item Lorsque  le système  a synchroniser la  page, il la  marque de
+    nouveaau Read-Only
+  \item cf. champ Dirty de \file{/proc/*/smaps}
+  \end{itemize}
+  Ce mécanisme est complémentaire à l'utilisation de la Swap. :
+  \begin{itemize}
+  \item Lorsque  le système  à besoin de  mémoire, il peut  écrire les
+    pages modifiées sur le disque et décharger la page de la mémoire
+  \end{itemize}
+  cf.    champ   \emph{buffer}   et   \emph{cache}  de   la   commande
+  \man{free(1)}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Partage de page}
+  \begin{itemize}
+  \item Une  tâche peut demander explicitement de  partager un segment
+    de mémoire avec une autre page.
+  \item Il  suffit de  faire pointer deux  addresse virtuelle  vers la
+    même addresse physique
+  \item Lorsqu'un fichier (ou une  section du fichier) est déjà chargé
+    en  mémoire,  le  système  ne  duplique  pas  la  page.  Elle  est
+    automatiquement marqué comme page partagée
+  \item Si  une des  tâche tente d'y  accèder en ecriture,  le système
+    duplique la  page juste  avant l'accès en  écriture (et  marque la
+    nouvelle page comme dirty).
+  \end{itemize}
+\end{frame}
+
+\subsection{Mapping de périphérique en mémoires}
 
 \begin{frame}{Gestion de la mémoire}
   Sécurisation des accès aux periphériques
   \begin{itemize}
-  \item Lorsque  les registres des périphériques sont  mappés en mémoire,
-    on utilise la MMU pour y accèder
+  \item  Lorsque  les  registres  des  périphériques  sont  mappés  en
+    mémoire, on utilise la MMU pour y accèder
   \item Il  est possible d'autoriser  l'accès à un périphérique  à une
     tâche sans lui donner d'accès au reste du système
   \item Un système utilisant  très fortement cette méthode est appellé
     micro-kernel
-  \item La méthode est peu utilisée sous Linux
-  \item cf. \emph{ioperm(2)}
+  \item La méthode est peu  utilisée sous Linux (on utilisera \c{mmap}
+    sur \file{/dev/mem})
+  \item cf. \man{ioperm(2)}
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Passage en mode superviseur}
-  Un processus utilisateur ne peut pas passer en mode superviseur.
-
-  Comment passer en mode superviseur?
-  \begin{itemize} 
-  \item Lorsqu'une interruption/exception est déclenchée
-  \item Cela nous permet de faire fonctionner les optimisations précédentes
-  \end{itemize} 
-
-  Comment appeller une fonction du système?
-  \begin{itemize} 
-  \item  Les  tâches ont  besoin  de  faire  des demandes  au  système
-    (exemple: allouer de la mémoire)
-  \item Ces fonctions système s'appellent des \emph{appels système} ou
-    \emph{syscall} (section 2 des pages de man)
-  \item  Elles ont  très  peu de  points  communs avec  les appels  de
-    fonctions classiques
-  \item   Chaque  \emph{syscall}   est   associé  à   un  numéro   (cf
-    \texttt{sys/syscall.h}                   \texttt{asm/unistd\_32.h},
-    \emph{syscalls(2)})
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Passage en mode superviseur}
-  Pour utiliser les \emph{appels systèmes} (cf \emph{syscall(2)}):
+\begin{frame}[fragile=singleslide]{\emph{mmap} sur des filedevice}
   \begin{itemize}
-  \item On place les arguments sur la pile
-  \item On place le numéro de l'interruption sur la pile
-  \item On déclenche une interruption logicielle (\texttt{int 0x80})
-  \item  Le  CPU  passe  en  mode  superviseur  et  appelle  l'ISR  de
-    l'interruption
-  \item L'OS prend  la main, regarde le premier element  de la pile et
-    appelle la fonction correspondante (\texttt{asm-generic/unistd.h})
+  \item Il est possible de  mapper en mémoire des fichier périphérique
+    (avec \man{mmap(2)})
+  \item  L'interprétation  de  cette  de  demande  est  laissée  à  la
+    discrétion du driver
+  \item Dans certains cas, ca n'a pas de sens: un port série
+  \item \file{/dev/mem}:  permet de mapper toute la  mémoire physique sur
+    une adresse virtuelle
+  \item   \file{/dev/video0}   (Webcam):   L'espace  de   mémoire   mappé
+    représentera une frame.
+  \item  \file{/dev/fb0} (Frame buffer):  L'espace de  mémoire représente
+    l'écran
+  \item Ce mécanisme vite les recopie de données
   \end{itemize}
-  Il  existe maintenant  des instructions  spéciales sur  les  CPU pour
-  optimiser   les    \emph{syscall}   (instructions   \emph{sysenter},
-  \emph{sysexit})
 \end{frame}
+
+\begin{frame}[fragile=singleslide]{Architecture d'un DMA}
+  Un DMA \emph{Direct Memory Access}:
+  \begin{itemize}
+  \item Il s'agit d'un mécanisme matériel.
+  \item  Il   doit  être  supporté   par  le  controleur   de  mémoire
+    (comprennant le MMU), le périphérique (ou le bus) et par l'OS
+  \item Le  driver au périfphérique  donne une addresse  (physique) ou
+    écrire
+  \item Le périphérique demande un canal DMA au controlleur
+  \item Dans le cas d'un PC, c'est le controlleur PCI (le northbridge)
+    qui joue le rôle de controlleur
+  \item  Le  périphérique écrit/lit  ses  données  en  passant par  le
+    controlleur de mémoire mais sans passer par le CPU
+  \item Le périphérique  déclenche une interruption lorsque l'ensemble
+    des données sont écrites/lues
+  \end{itemize}
+  Le  driver peut  décider  de  mapper la  zone  DMA directement  dans
+  l'espace d'adressage de la  tâche utilisateur. Avec ce mécanisme, il
+  est possible de traiter de grande quantitée de données sans copie.
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Fonctionnement    d'un    recepteur
+    satellite haut de gamme}
+  \begin{itemize}
+  \item Un  recepteur satelite  (ou IP-TV) est  principalement composé
+    d'un démodulateur/démultiplexeur et d'une carte graphique.
+  \item Ces deux périphérique sont équipés de DMA
+  \item  On  alloue  une  zone  de  mémoire  suffisament  grande  pour
+    receptionner quelques images (2 - 3 au moins)
+  \item L'OS passe l'addresse de cette zone au démultiplexeur
+  \item Des que le multiplexer à fini d'écrire une frame, il déclenche
+    une interruption (et  continue d'écrire la suite dans  la suite du
+    DMA)
+  \item L'OS  reprend la main. Il  passe l'adresse de cette  zone à la
+    carte graphique.
+  \end{itemize}
+  Il est ainsi possible de transférer de grande quantité de données em
+  limitant l'utilisation  du CPU (et  les risque de problème  de temps
+  réel)
+\end{frame}
+
+\section{Threads et Processus}
 
 \begin{frame}{Threads}
   Thread versus Processus
   \begin{itemize}
-  \item On  appelle les tâches  ayant des contextes  mémoires différents
-    des \emph{Processus} (cf. \emph{fork(2)})
+  \item On appelle les  tâches ayant des contextes mémoires différents
+    des \emph{Processus} (cf. \man{fork(2)})
   \item  Il est  possible  d'éxécuter plusieurs  tâches  dans un  même
     contexte mémoire
   \item  Ces  tâche sont  appellées  \emph{threads} ou  \emph{processus
-      lègers} (cf. \emph{clone(2)})
+      lègers} (cf. \man{clone(2)})
   \item Le fonctionnement  est alors identique au mode  sans MMU, avec
     les mêmes défauts et avantages:
     \begin{itemize}
-    \item  Pas  de protection  contre  les  erreurs de programmation  des
+    \item Pas  de protection contre  les erreurs de  programmation des
       autres threads
     \item Partage de l'information simplifiée
     \item Passage d'une thread à une autre beaucoup plus rapide
     \end{itemize}
   \end{itemize}
   \note{Attention au latence lors de l'allocation, et du swap}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile]{Utilisation de processus}
 \begin{lstlisting}
@@ -476,8 +674,8 @@ int main() {
     // Child
   }
 }
-\end{lstlisting} 
-\end{frame} 
+\end{lstlisting}
+\end{frame}
 
 \begin{frame}[fragile]{Utilisation de threads}
 \begin{lstlisting}
@@ -494,221 +692,8 @@ int main() {
   pthread_create(&id, NULL, task, (void *) arg);
   // Parent
 }
-\end{lstlisting} 
-\end{frame} 
+\end{lstlisting}
+\end{frame}
 
-% \begin{frame}{Résumé sur le multiptâche. Commandes ps et pmap, et /proc}
-% Memoire
-%   \item pmem, \%mem, rss, rsz, rssize: Mémoire résidente, c'est à dire quantité de mémoire physqiue effectivement utilisé par le processus (par consequent, la memoire swapée n'est pas prise en compte). 
-%   \item vsz,vsize : Taille de la plage d'addressage virtuelle du processus (sans les mapping de devices). Peut-être très supérieure à rss
-%   \item  sz:     size in physical pages of the core image of the process. This includes text, data, and stack space. Device mappings are currently excluded; this is subject to change. See vsz and rss.
-
-% Temps
-%        %cpu, pcpu, cp      %CPU   cpu utilization of the process in "##.#" format. Currently, it is the CPU time used divided by the time the process has been running (cputime/realtime ratio), expressed as a percentage.
-%                         It will not add up to 100% unless you are lucky. (alias pcpu).
-
-%        bsdstart  START  time the command started. If the process was started less than 24 hours ago, the output format is " HH:MM", else it is "mmm dd" (where mmm is the three letters of the month). See also
-%                         lstart, start, start_time, and stime.
-
-%        bsdtime   TIME   accumulated cpu time, user + system. The display format is usually "MMM:SS", but can be shifted to the right if the process used more than 999 minutes of cpu time.
-
-%        cputime, time   TIME   cumulative CPU time, "[dd-]hh:mm:ss" format. (alias time).
-
-%        etime     ELAPSEDelapsed time since the process was started, in the form [[dd-]hh:]mm:ss.
-
-%        lstart    STARTEDtime the command started. See also bsdstart, start, start_time, and stime.
-
-%        c         C      processor utilization. Currently, this is the integer value of the percent usage over the lifetime of the process. (see %cpu).
-
-
-%        args,cmd, command      COMMANDcommand with all its arguments as a string. Modifications to the arguments may be shown. The output in this column may contain spaces. A process marked <defunct> is partly dead, waiting
-%                         to be fully destroyed by its parent. Sometimes the process args will be unavailable; when this happens, ps will instead print the executable name in brackets. (alias cmd, command). See
-%                         also the comm format keyword, the -f option, and the c option.
-%                         When specified last, this column will extend to the edge of the display. If ps can not determine display width, as when output is redirected (piped) into a file or another command, the
-%                         output width is undefined. (it may be 80, unlimited, determined by the TERM variable, and so on) The COLUMNS environment variable or --cols option may be used to exactly determine the
-%                         width in this case. The w or -w option may be also be used to adjust width.
-
-
-%        class, cls, policy, sched     scheduling class of the process. (alias policy, cls). Field's possible values are:
-%                         -   not reported
-%                         TS  SCHED_OTHER
-%                         FF  SCHED_FIFO
-%                         RR  SCHED_RR
-%                         B   SCHED_BATCH
-%                         ISO SCHED_ISO
-%                         IDL SCHED_IDLE
-%                         ?   unknown value
-
-%        fname     COMMANDfirst 8 bytes of the base name of the process's executable file. The output in this column may contain spaces.
-
-%        comm      COMMANDcommand name (only the executable name). Modifications to the command name will not be shown. A process marked <defunct> is partly dead, waiting to be fully destroyed by its parent. The
-%                         output in this column may contain spaces. (alias ucmd, ucomm). See also the args format keyword, the -f option, and the c option.
-%                         When specified last, this column will extend to the edge of the display. If ps can not determine display width, as when output is redirected (piped) into a file or another command, the
-%                         output width is undefined. (it may be 80, unlimited, determined by the TERM variable, and so on) The COLUMNS environment variable or --cols option may be used to exactly determine the
-%                         width in this case. The w or -w option may be also be used to adjust width.
-
-
-% Droits
-%        {e,f,r,s}uid  uid effectif/filesystem/réel/sauvegardé
-%        {e,f,r,s}user  utilisateur effectif/filesystem/réel/sauvegardé
-%        {e,f,r,s}gid  gid effectif/filesystem/réel/sauvegardé
-%        {e,f,r,s}groupe  groupe effectif/filesystem/réel/sauvegardé
-
-%        pgid, pgrp   process group ID or, equivalently, the process ID of the process group leader. (alias pgrp).
-
-
-%        eip       EIP    instruction pointer.
-
-%        esp       ESP    stack pointer.
-
-
-
-%        f         F      flags associated with the process, see the PROCESS FLAGS section. (alias flag, flags).
-
-%        flag      F      see f. (alias f, flags).
-
-%        flags     F      see f. (alias f, flag).
-
-
-% Signaux:
-%        blocked   BLOCKEDmask of the blocked signals, see signal(7). According to the width of the field, a 32-bit or 64-bit mask in hexadecimal format is displayed. (alias sig_block, sigmask).
-
-%        caught    CAUGHT mask of the caught signals, see signal(7). According to the width of the field, a 32 or 64 bits mask in hexadecimal format is displayed. (alias sig_catch, sigcatch).
-
-%        ignored   IGNOREDmask of the ignored signals, see signal(7). According to the width of the field, a 32-bit or 64-bit mask in hexadecimal format is displayed. (alias sig_ignore, sigignore).
-
-%        label     LABEL  security label, most commonly used for SE Linux context data. This is for the Mandatory Access Control ("MAC") found on high-security systems.
-
-
-%        lwp       LWP    lwp (light weight process, or thread) ID of the lwp being reported. (alias spid, tid).
-
-%        ni, nice        NI     nice value. This ranges from 19 (nicest) to -20 (not nice to others), see nice(1). (alias nice).
-
-%        nlwp      NLWP   number of lwps (threads) in the process. (alias thcount).
-
-%        nwchan    WCHAN  address of the kernel function where the process is sleeping (use wchan if you want the kernel function name). Running tasks will display a dash ('-') in this column.
-
-
-%        pending   PENDINGmask of the pending signals. See signal(7). Signals pending on the process are distinct from signals pending on individual threads. Use the m option or the -m option to see both.
-%                         According to the width of the field, a 32-bit or 64-bit mask in hexadecimal format is displayed. (alias sig).
-
-%        pid       PID    process ID number of the process.
-
-
-%        ppid      PPID   parent process ID.
-
-%        pri       PRI    priority of the process. Higher number means lower priority
-
-%        psr       PSR    processor that process is currently assigned to.
-
-
-
-%        rssize    RSS    see rss. (alias rss, rsz).
-
-%        rsz       RSZ    see rss. (alias rss, rssize).
-
-%        rtprio    RTPRIO realtime priority.
-
-
-%        s         S      minimal state display (one character). See section PROCESS STATE CODES for the different values. See also stat if you want additional information displayed. (alias state).
-
-
-%        sess      SESS   session ID or, equivalently, the process ID of the session leader. (alias session, sid).
-
-%        sgi_p     P      processor that the process is currently executing on. Displays "*" if the process is not currently running or runnable.
-
-%        sid       SID    see sess. (alias sess, session).
-
-%        sig       PENDINGsee pending. (alias pending, sig_pend).
-
-
-%        sigcatch  CAUGHT see caught. (alias caught, sig_catch).
-
-%        sigignore IGNOREDsee ignored. (alias ignored, sig_ignore).
-
-%        sigmask   BLOCKEDsee blocked. (alias blocked, sig_block).
-
-%        size      SZ     approximate amount of swap space that would be required if the process were to dirty all writable pages and then be swapped out. This number is very rough!
-
-%        spid      SPID   see lwp. (alias lwp, tid).
-
-%        stackp    STACKP address of the bottom (start) of stack for the process.
-
-%        start     STARTEDtime the command started. If the process was started less than 24 hours ago, the output format is "HH:MM:SS", else it is "  mmm dd" (where mmm is a three-letter month name). See also
-%                         lstart, bsdstart, start_time, and stime.
-
-%        start_timeSTART  starting time or date of the process. Only the year will be displayed if the process was not started the same year ps was invoked, or "mmmdd" if it was not started the same day,
-%                         or "HH:MM" otherwise. See also bsdstart, start, lstart, and stime.
-
-%        stat      STAT   multi-character process state. See section PROCESS STATE CODES for the different values meaning. See also s and state if you just want the first character displayed.
-
-%        state     S      see s. (alias s).
-
-
-%        thcount   THCNT  see nlwp. (alias nlwp). number of kernel threads owned by the process.
-
-%        tid       TID    see lwp. (alias lwp).
-
-
-%        tname     TTY    controlling tty (terminal). (alias tt, tty).
-
-%        tpgid     TPGID  ID of the foreground process group on the tty (terminal) that the process is connected to, or -1 if the process is not connected to a tty.
-
-%        tt, tty        TT     controlling tty (terminal). (alias tname, tty).
-
-%        ucmd      CMD    see comm. (alias comm, ucomm).
-
-%        ucomm     COMMANDsee comm. (alias comm, ucmd).
-
-%        wchan     WCHAN  name of the kernel function in which the process is sleeping, a "-" if the process is running, or a "*" if the process is multi-threaded and ps is not displaying threads.
-% \note{On doit être capable de décrire toute les entrée de la commande ps}
-
-% \end{frame} 
-
-\begin{frame}{Multitâche, MMU et Temps réel} 
-  \begin{itemize}
-  \item Le multitâche permet une meilleure gestion de la concurence
-  \item MMU a de multiple avantages (sécurité, optimisation)
-  \item En revanche le fonctionnement  de la MMU entraine de multiples
-    exceptions
-  \item Une  allocation mémoire  peut d'un seul  coup changer  tout le
-    mapping
-  \item Un accès en mémoire  peut être immédiat 100 fois mais demander
-    un accès aux disque la 101eme fois
-  \item  Il devient  difficile de  garantir le  temps de  calcul d'une
-    fonction
-  \item Les  fonctions systèmes \texttt{mlock}  et \texttt{mlock\_all}
-    permettent  de  demander  à  Linux  de garder  des  pages  (ou  la
-    totatlité en mémoire)
-  \item  Il ne  faut pas  oublier d'allouer  une pile  suffisante avant
-    d'appeller \texttt{mlock\_all}
-    \note{Ajouter du code à ce sujet} 
-  \item Néanmoins, cela ne change pas que l'allocation dynamique ne se
-    fait pas en temps constant
-  \end{itemize} 
-\end{frame} 
-
-\begin{frame}[fragile]{Utilisation de \texttt{mlock}}
-\begin{lstlisting}
-#include <sys/mman.h>
-
-void alloc_stack_1k() {
-  char t[1024];
-}
-
-int main() {
-  alloc_stack_1k();
-  mlockall(MCL_CURRENT | MCL_FUTURE);
-}
-\end{lstlisting} 
-\end{frame} 
-
-% \begin{frame}{Bibliographie}
-% \begin{itemize} 
-%   \item Thomas Petazoni et ??? ???
-%   \item Documentation/ dans les sources du noyau
-% \end{itemize} 
-% \end{frame}
 
 \note{Montrer l'arborescence du kernel: mm, kernel, include, arch, drivers, scripts, tools, Documentation, }
-

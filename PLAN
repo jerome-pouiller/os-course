@@ -283,7 +283,7 @@ Jamais de commentaires: ca a été dur à écrire, ca doit ête dur à comprendr
     - perf/oprofile
     - dynamic printk
     - strace/ltrace
-    - Les autres outils pour le dev système
+    - Les autres outils pour la qualité des devs système
        - diff /patch
        - patchutils
        - quilt

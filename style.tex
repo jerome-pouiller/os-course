@@ -26,12 +26,12 @@
 \setbeamertemplate{navigation symbols}{}
 
 % Logo en filigranne
-\setbeamertemplate{background canvas}{
-  \tikz {
-    \node at (0,0) {};
-    \node[inner sep=0pt, opacity=0.2] at (0.5\paperwidth,-0.8\paperheight) {\includegraphics[height=23.4mm,width=128mm]{pics/logo}};
-  }
-}
+% \setbeamertemplate{background canvas}{
+%   \tikz {
+%     \node at (0,0) {};
+%     \node[inner sep=0pt, opacity=0.2] at (0.5\paperwidth,-0.8\paperheight) {\includegraphics[height=23.4mm,width=128mm]{pics/logo}};
+%   }
+% }
 
 % Ajout des numéros de pages
 \newcommand*\oldinsertshortitle{}%
@@ -60,10 +60,12 @@
 \PreviewEnvironment{frame}
 
 \usepackage{hyperref} % Doit être chargé avant ntheorem
+%\usepackage{realboxes} % Pour \Colorbox
 \newcommand{\email}[1]{\href{mailto:#1}{\nolinkurl{<#1>}}}
-\newcommand{\file}[1]{\texttt{#1}}
-\newcommand{\cmd}[1]{\texttt{#1}}
-\renewcommand\c[1]{\lstinline[language=c]{#1}}
+\newcommand{\man}[1]{\emph{#1}}
+\newcommand\file[1]{\lstinline[backgroundcolor=\color{{rgb}{1,1,0.8}},language=]{#1}}
+\newcommand\cmd[1]{\lstinline[backgroundcolor=\color{{rgb}{1,1,0.8}},language=]{#1}}
+\renewcommand\c[1]{\lstinline[backgroundcolor=\color{{rgb}{1,1,0.8}},language=c]{#1}}
 
 \usepackage[newcommand]{ragged2e}
 
@@ -141,7 +143,7 @@
   breakautoindent=true,%     % Inutile avec breaklines=false
   literate={é}{{\'e}}1 {è}{{\`e}}1 {ô}{{\^o}}1 {à}{{\`a}}1 {ç}{{\c{c}}}1 
 }
-\lstset{language=C++}        % ... En C++
+\lstset{language=}        % ... En C++
 
 \definecolor{darkgreen}{rgb}{0, 0.7, 0}
 \definecolor{darkgreen2}{rgb}{0, 0.5, 0}
