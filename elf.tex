@@ -1,0 +1,312 @@
+%
+% This document is available under the Creative Commons Attribution-ShareAlike
+% License; additional terms may apply. See
+%   * http://creativecommons.org/licenses/by-sa/3.0/
+%   * http://creativecommons.org/licenses/by-sa/3.0/legalcode
+%
+% Created: 2012-07-28 20:09:12+02:00
+% Main authors:
+%     - Jérôme Pouiller <jezz@sysmic.org>
+%
+
+\part{La création d'executables}
+
+\begin{frame}
+  \partpage
+\end{frame}
+
+\begin{frame}
+  \tableofcontents[currentpart]
+\end{frame}
+
+%% A reformuler, revoir
+\subsection{Exemple}
+
+\begin{frame}[fragile=singleslide]{Compilation}
+  Compilation normale:
+  \begin{lstlisting}
+host$ gcc -c hello.c -o hello.o
+host$ gcc hello.o -o hello
+host$ ./hello 1
+Hello World
+  \end{lstlisting} %$
+\end{frame}
+
+\subsection{Fonctionnement de la compilation}
+
+\begin{frame}[fragile=singleslide]{Le format ELF}
+  \begin{itemize}
+  \item La  plupart des fichiers  manipulés par le compilateur  et les
+    outils associés sont au format ELF
+  \item Ce format est une série de sections et de tables
+  \item  Certaines sections seront chargée en mémoires
+  \item  Certaines  section  demande  à etre  simplement  allouées  en
+    mémoire
+  \item  \man{objdump(1)} permet  d'obtenir des  informations  que un
+    fichier ELF
+  \item  \man{objcopy(1)}  permet   d'extraire  des  sections  ou  de
+    modifier un fichier au format ELF
+  \item \man{readelf(1)}  et \man{nm(1)}, mais  \cmd{objdump} contient
+    toute leurs fonctionnalités
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{La compilation}
+  La compilation:
+  \begin{itemize}
+  \item Execute le préprocesseur (fichier \file{.i}), puis le compilateur
+    vérifie  la syntaxe,  le typage,  converti le  code  en assembleur
+    (fichier \file{.s}) puis en code objet (fichier \file{.o})
+  \item L'option \file{-c} est utilisé.
+  \item Le compilateur doit connaitre les signature des fonction (afin
+    de vérifier correctement le typage).
+  \item Les  fichiers headers  (fichiers \file{.h}) sont  nécessaires pour
+    cette phase
+  \item  \file{-I} permet  de  spécifier des  chemins supplémentaires  où
+    rechercher des fichiers headers (par défaut: \file{/usr/include})
+  \item Si un fichier est  inclu entre double-quotes, il est recherché
+    dans le même répertoire que le source.
+  \item \cmd{-Wall}, \cmd{-Wextra} recommandés
+  \item \cmd{-DMACRO} peut etre utilisé
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les symboles de debug}
+  \begin{itemize}
+  \item \cmd{-g} permet d'ajouter  une section contenant des symboles de
+    debug.
+  \item  Utilisé  spar les  debuggueur  pour  donner des  informations
+    supplémentaire ou pour faire le lien avec les sources.
+  \item Cette section n'est pas chargée en mémoire.
+  \item Le format utilisé s'apeller \emph{dwarf} (Debug with Arbitrary
+    Record Format).
+  \item L'option \cmd{-g} ne change pas le code généré:
+    \begin{lstlisting}
+$ gcc -g -c main.c -o main-dbg.o
+$ gcc -c main.c -o main-rel.o
+$ ls -l
+-rw-rw-r-- jpo jpo 2125 Aug 3 16:05 main-rel.o
+-rw-rw-r-- jpo jpo 3720 Aug 3 16:05 main-dbg.o
+$ strip *.o
+$ ls -l
+-rw-rw-r-- jpo jpo 2096 Aug 3 16:05 main-rel.o
+-rw-rw-r-- jpo jpo 2096 Aug 3 16:05 main-dbg.o
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\subsection{Edition de liens}
+
+\begin{frame}[fragile=singleslide]{Inlining}
+  Le compilateur peut effectuer quelques optimisations:
+  \begin{itemize}
+  \item Les  fonction et les  variables marquées \c{static}  ne seront
+    pas exportés, et donc, pas utilisé par les autres fichier objets.
+  \item  Le compilateur peut décider d'\emph{inliner} ces fonctions
+  \item Si toutes les appels à une fonctions statique ont été inlinés,
+    il peut supprimer la fonction du fichier objet.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{L'édition de liens}
+  \begin{itemize}
+  \item  Le compilateur  ne connait  pas forcement  les  addresses des
+    fonctions et des variables globale marquées \c{extern}
+  \item  Les endroits  ayant  besoin de  ces fonctions/variables  sont
+    remplacés par  des 0 et une  entrée est ajoutée dans  la table des
+    \emph{relocation} du fichier objet (cf. \cmd{objdump -R})
+  \item On  appelle le \emph{linker} (\c{gcc} sans  l'option \c{-c}) pour
+    résoudre les symboles
+  \item Le linker connait toutes les fonctions, et toutes les tables de
+    relocation.
+  \item Il peut déplacer les  addresses de chargement des fonctions et
+    des variables de  manière à les mettre au  plus près des fonctions
+    qui  les   appellent  (optimisation  de   l'utilisation  du  cache
+    d'instruction)
+  \item Une  fois l'agencement des fonctions défini,  le linker résoud
+    toutes les entrées des tables de relocations
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques}
+  \begin{itemize}
+  \item  Afin de  simplifier  le déploiment  des  utilitaires, il  est
+    possible  d'empaqueter  un  ensemble  de fichier  objet  dans  une
+    bibliothèque dite statique (fichier \file{.a}). cf. \man{ar(1)}.
+  \item Dans ce cas, cela ne change rien à la procedure de link
+  \item Il  est aussi possible d'utiliser  des biliothèques dynamiques
+    (fichier \file{.so}). Nous y reviendrons.
+  \item  Il  est  possible  de  spécifier  le  chemin  complet  de  la
+    bibliothèque (dynamique ou statique)  ou de laisser le compilateur
+    la trouver  automatiquement avec  la syntaxe \cmd{-lbrary}.  On peut
+    dans ce cas lui précisier des chemins supplémentaire ou rechercher
+    la bibliothèque avec \cmd{-L}
+  \item  Par  défaut,  le  compilateur  recherchera  les  bibliothèques
+    dynamiques, sauf si l'option \cmd{-static} est utilisée
+  \item  Le  linker suit  en  fait  une  des recettes  contenues  dans
+    \file{/usr/lib/ldscripts/}  (en fonction  des  options passées  au
+    linker).   Il   est  possible  de  fabriquer   son  propre  format
+    (\cmd{ld -T}) (utile pour générer des firmwares).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Libtool}
+  Problème:
+  \begin{itemize}
+  \item Les  fichiers objets des bibliothèques  statiques et dynamique
+    ne se compilent pas avec les mêmes options
+  \item  Certaines architectures ne  permettent pas  les bibliothèques
+    dynamiques
+  \item La  création de bibliothèques  portables peut devenir  un vrai
+    casse tête
+  \end{itemize}
+  \emph{libtool} est outil permettant de faciliter ce travail.
+\end{frame}
+
+\subsection{Les bibliothèques dynamiques}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  L'usage de bibliothèques dynamique permet:
+  \begin{itemize}
+  \item de ne charger qu'un exemplaire de la bibliothèque pour tout le
+    système
+  \item de simplifier la redistribution du programme
+  \item de simplifier les mises à jour de la bibliothèque
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  Coté bibliothèque:
+  \begin{itemize}
+  \item  Elle contient  une table  des  symboles exportés  et de  leur
+    emplacement (dans la table \emph{.dynsym})
+  \item A  la construction, elle  doit être linkée  avec \cmd{-shared}
+    pour indiquer  que sont  chargement sera différent  d'un programme
+    standard (principalement, aucune fonction main n'est nécessaire)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  Coté éxecutable:
+  \begin{itemize}
+  \item Le  linker va ajouter une table  d'indirection (la \emph{.got}
+    \emph{Global  Offset Table})  pour tous  les symboles  se trouvant
+    dans des bibliothèques
+  \item Le linker doit passer  par cette indirection pour appeller une
+    fonction exportée par une biliothèque dynamique.
+  \item Il ne peut pas faire  tenir ce morceau de code à l'emplacement
+    laissé par le compilateur
+  \item Il crée  donc un petit morceau de code  qu'il placera dans une
+    section \emph{Procedure Linkage Table} (\emph{.plt})
+  \item Cette  procedure permet simplement  de brancher vers  la table
+    d'indirection.
+    \begin{lstlisting}
+$ objdump -d | grep -A 10 "section \.plt"
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  A l'éxécution
+  \begin{itemize}
+  \item Un interpreteur (normalement \file{/lib/ld.so}) est appellé
+  \item  Il charge  les bibliothèques  nécessaires (inscrites  dans la
+    table \emph{.dynamic}) en mémoire
+  \item  Il  remplit la  GOT  avec  des  pointeurs vers  une  fonction
+    permettant la résolution du symbole.
+  \item Lorsque ce symbol est appellé la première fois, cette fonction
+    est appellée.
+  \item La fonction résoud le symbol et place son adresse dans la GOT
+  \item Cette méthode s'appelle \emph{lazy resolving}
+  \item   Cela   peut   être   désactivé  en   passant   la   variable
+    d'environnement \cmd{LD_BIND_NOW}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  \begin{itemize}
+  \item Il est possible de  demander le chargement manuel et dynamique
+    des    bibliothèques    et    des    symboles    avec    \c{libdl}
+    (\man{dl\_open(3)}, \man{dl\_sym(3)})
+  \item Afin d'accélérer le  chargement, \file{ld.so} utilise un index de
+    bibliothèques présentes  sur le  système.
+  \item  Lorsque vous  ajoutez une  bibliothèque, vous  devez appeller
+    \man{ldconfig(1)} pour mettre à jour ce cache.
+  \item la variable \cmd{LD_LIBRARY_PATH}  permet d'ajouter un chemin de
+    recherche de biliothèque pour \file{ld.so}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Utilisation de \c{LD_PRELOAD}}
+  \begin{itemize}
+  \item La  variable d'envionnement \c{LD_PRELOAD}  permet de demander
+    le chargement d'une bibliothèque avant les autres
+  \item Les symboles exportées par celle-ci seront prioritaires.
+  \item Exemple:
+    \begin{lstlisting}
+unsigned int sleep(unsigned int s) {
+    static unsigned int (*real_sleep)(unsigned int s) = NULL;
+
+    if (!real_sleep)
+        real_sleep = dlsym(RTLD_NEXT, ``sleep'');
+
+    usleep(5);
+    return real_sleep(s);
+}
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+% Section: Redistribution? A deplacer apres les outils de compilation?
+
+\begin{frame}[fragile=singleslide]{A qui fournir quoi?}
+  \begin{itemize}
+  \item La poubelle
+    \begin{itemize}
+    \item Les dependances
+    \item Les objets (ELF)
+    \end{itemize}
+  \item Les sources
+    \begin{itemize}
+    \item Les sources
+    \item Les headers
+    \item Le système de compilation
+    \end{itemize}
+  \item Les developpeurs externes
+    \begin{itemize}
+    \item Les headers
+    \item Les bibliothèque statique (archve crée avec \man{ar(2)})
+    \end{itemize}
+  \item L'utilisateur final
+    \begin{itemize}
+    \item Les bibliothèque dynamique (ELF)
+    \item Les binaires (ELF)
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Identifier le résultat}
+  Un bon moyen de reconnaitre  les binaires est d'utiliser la commande
+  \man{file(1)}:
+  \begin{lstlisting}
+host$ file ...
+hello-dyn:        ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.15, not stripped
+hello-static: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically linked, for GNU/Linux 2.6.15, not stripped
+/lib/x86_64-linux-gnu/librt-2.15.so: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, stripped
+/usr/lib/x86_64-linux-gnu/librt.a: current ar archive
+\end{lstlisting} %$
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Redistribution et licences}
+  \begin{itemize}
+  \item GPL. Est-ce du travail dérivé?
+    \begin{itemize}
+    \item Le resultat d'un copier-coller?
+    \item Une compilation statique?
+    \item Une compilation dynamique?
+    \end{itemize}
+  \item LGPL
+  \end{itemize}
+\end{frame}
+
+
