@@ -23,12 +23,12 @@
 
 \begin{frame}[fragile=singleslide]{Historique}
   \begin{itemize}
-  \item Mode de communication bas niveau privilègié
-  \item  Lèger,  simple  à  implémenter, puissant.   Parfois  l'unique
+  \item Mode de communication bas niveau privilégié
+  \item  Léger,  simple  à  implémenter, puissant.   Parfois  l'unique
     manière de communiquer avec le système.
   \item Le shell ``Unix'' est plus commun. Beaucoup d'autres interface
     en ligne de commande s'en inspire.
-  \item Première version du shell Unix tel qu'on le connait écrite par
+  \item Première version du shell Unix tel qu'on le connaît écrite par
     Ken Thompson chez Bell Labs en 1971 (bien antérieur à Linux)
   \item Remplacé par le shell de Stephen Bourne en 1977
   \item  Par  ordre  approximatif d'apparition:  \cmd{sh},  \cmd{csh},
@@ -55,7 +55,7 @@ $ ls
 $ mkdir dir1 dir2
     \end{lstlisting} %$
   \item Conséquence: les espaces sont des caractères spéciaux en shell
-  \item  Les  arguments sont  recus  par  le  programme par  les  deux
+  \item  Les  arguments sont  reçus  par  le  programme par  les  deux
     arguments \c{argc} et \c{argv}
   \item  Remarque: certaines commandes  ont un  comportement différent
     suivant \c{argv[0]} (exemple: \c{test} et \c{[})
@@ -84,7 +84,7 @@ $ ls --sort=time
 $ ls --sort time
     \end{lstlisting}
   \item  ... et des  options courte  tenant sur  un seul  caractère et
-    commencant  par un  simple  ``\c{-}'' (attention  tout  de même  aux
+    commençant  par un  simple  ``\c{-}'' (attention  tout  de même  aux
     exceptions)
     \begin{lstlisting}
 $ ls -l -a
@@ -111,7 +111,7 @@ $ ls -la
 
 \begin{frame}[fragile=singleslide]{La documentation}
   \begin{itemize}
-  \item  \cmd{man  COMMAND} permet  d'accèder  à  la documentation  de
+  \item  \cmd{man  COMMAND} permet  d'accéder  à  la documentation  de
     \c{COMMAND}
   \item  Les  pages  de  man  sont  divisée  en  9  sections
   \item D'après \man{man(1)}):
@@ -133,7 +133,7 @@ $ ls -la
 \begin{frame}[fragile=singleslide]{La documentation}
   \begin{itemize}
   \item Une même entrée peut  être présente dans plusieurs section, il
-    possible de préciser la section en la placant en argument avant la
+    possible de préciser la section en la plaçant en argument avant la
     commande:
     \begin{lstlisting}
 $ man read
@@ -151,7 +151,7 @@ $ man 2 read
 \begin{frame}[fragile=singleslide]{Les chemins}
   Il est possible d'utiliser des chemins:
   \begin{itemize}
-  \item absolus, commencant par un \c{/}
+  \item absolus, commençant par un \c{/}
     \begin{lstlisting}
 $ mkdir /tmp/tete
     \end{lstlisting}
@@ -160,7 +160,7 @@ $ mkdir /tmp/tete
 $ mkdir tmp/titi
     \end{lstlisting}
   \end{itemize}
-  Les  chemins  relatifs, s'interprête  à  partir du  \emph{répertoire
+  Les  chemins  relatifs, s'interprète  à  partir du  \emph{répertoire
     courant}  (lié au  processus actuel  et hérité  par  les processus
   fils).
   \begin{itemize}
@@ -174,12 +174,12 @@ $ mkdir tmp/titi
   \item Dans un chemin, ``\c{.}'' correspond au répertoire courant
   \item ... \cmd{mkdir foo} est identique à \cmd{mkdir ././foo}
   \item ``\cmd{..}'' correspond au répertoire parent
-  \item  Beaucoup de  commandes  prennant en  parametre un  répertoire
+  \item  Beaucoup de  commandes  prenant en  paramètre un  répertoire
     utilise le  répertoire courant si le paramètre  n'est pas spécifié
     (ex: \cmd{ls})
   \item  cf. \man{path\_resolution(7)}
   \end{itemize}
-  Note: Les fichiers commencant  par '\c{.}' sont considérés comme des
+  Note: Les fichiers commençant  par '\c{.}' sont considérés comme des
   fichiers cachés
 \end{frame}
 
@@ -209,31 +209,31 @@ $ mkdir tmp/titi
       et \man{charsets(7)})
     \item Le principe de ``type'' de fichier est finalement assez flou.
     \item \man{file(1)} permet de repérer le format des fichier
-    \item L'utilisation d'une norme de nommage ou d'une extention peut
-      aussi  aider, mais  ca  n'est  pas une  pratique  native sur  la
+    \item L'utilisation d'une norme de nommage ou d'une extension peut
+      aussi  aider, mais  ça  n'est  pas une  pratique  native sur  la
       plupart des OS.
     \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les file descriptor}
   \begin{itemize}
-  \item  Lorsqu'un programme  souhaite  accèder à  un  fichier, il  va
+  \item  Lorsqu'un programme  souhaite  accéder à  un  fichier, il  va
     utiliser  la  fonction Posix  \man{open(3)}  qui  lui retourne  un
-    nombre   appellé  \emph{file  descriptor}   (\emph{descripteur  de
+    nombre   appelé  \emph{file  descriptor}   (\emph{descripteur  de
       fichier}).
   \item Il s'agit d'un identifiant pour une structure dans l'OS.
   \item  Le file  descriptor peut  être passé  à d'autre  fonctions du
     système comme \man{read(3)} ou \man{write(3)}.
   \item  Nous   verrons  plus  tard  que  le   concept  de  \emph{file
       descriptor} va plus loin
-  \item  Les couche basses  de l'OS  ouvre automaitquement  trois file
+  \item  Les couche basses  de l'OS  ouvre automatiquement  trois file
     descriptor lors qu'un programme est lancé:
     \begin{itemize}
     \item    Entrée    standard     (numéro    0),    accessible    en
       lecture. Normalement reliée au clavier.
     \item    Sortie    standard     (numéro    1),    accessible    en
       écriture. Normalement reliée à l'écran
-    \item    Sortie    d'erreur     (numéro    2),    accéssible    en
+    \item    Sortie    d'erreur     (numéro    2),    accessible    en
       écriture. Normalement reliée à l'écran
     \end{itemize}
   \end{itemize}
@@ -262,7 +262,7 @@ $ ls toto 2> file
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Les Redirections}
+\begin{frame}[fragile=singleslide]{Les redirections}
   \begin{itemize}
   \item Sortie standard d'une commande vers l'entrée d'une autre
     \begin{lstlisting}
@@ -311,7 +311,7 @@ $ FOO+=bar
 \begin{frame}[fragile=singleslide]{Les variables locales}
   La  syntaxe  \c{$\{VAR\}}  permet  de  récupérer  le  contenu  d'une
   variable.  Elle peut-être abbregée  \c{$VAR} si elle est suivit d'un
-  caractère non-alpha-numérique
+  caractère non-alphanumérique
   \begin{lstlisting}
 $ echo ${FOO}
 $ echo $FOO
@@ -329,7 +329,7 @@ $ echo ${FOO}_bar $FOO_bar
   \item   On   y    accéder   facilement   avec   \man{getenv(3)}   et
     \man{setenv(3)}
   \item  Par défaut,  un processus  hérite de  l'environnement  de son
-    parent (cf. \man{exev(3)})
+    parent (cf. \man{execv(3)})
   \item  Un programme peut  modifier son  comportement en  fonction du
     contenu de l'environnement
   \item \cmd{export} liste les variable d'environnement
@@ -340,8 +340,8 @@ $ echo ${FOO}_bar $FOO_bar
 
 \begin{frame}[fragile=singleslide]{Les variables d'environnement}
   \begin{itemize}
-  \item  Il est  possible de  lancer  une commande  avec une  varibale
-    d'envionnement particulière:
+  \item  Il est  possible de  lancer  une commande  avec une  variable
+    d'environnement particulière:
     \begin{lstlisting}
 $ LANG=fr_FR.utf8 ls non-existant
 ls: impossible d'accéder à  non-existant: Aucun fichier ou dossier de ce type
@@ -364,23 +364,23 @@ ls: impossible d'accéder à  non-existant: Aucun fichier ou dossier de ce type
   \begin{itemize}
   \item \c{PATH}: les chemins ou les commandes doivent être recherchée
   \item   \c{LANG},    \c{LOCALE}   et   \c{LC_*}:    les   information
-    d'internationnalisation
-  \item  \c{DISPLAY}:  l'addresse  du  serveur  d'affichage  pour  les
+    d'internationalisation
+  \item  \c{DISPLAY}:  l'adresse  du  serveur  d'affichage  pour  les
     commande graphique
   \item \c{TERM}: le type de  terminal utilisé (nécessaire pour le bon
-    affichage des couleur et des outils fenetrés)
+    affichage des couleur et des outils fenêtrés)
   \item \c{LS_COLOR}:  contient la  configuration de coloration  de la
-    command \c{ls --color}
+    commande \c{ls --color}
   \item \c{PAGER}, \c{EDITOR}, \c{BROWSER}:  Les outils à utilisé pour
     visualiser, éditer et aller sur le web.
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{La syntaxe évoluée des variable}
-  La syntax des variables peut être plus évoluée:
+\begin{frame}[fragile=singleslide]{La syntaxe évoluée des variables}
+  La syntaxe des variables peut être plus évoluée:
   \begin{itemize}
   \item  \c{$\{VAR#foo\}} ou  \c{$\{VAR/foo/bar\}} pour  effectuer des
-    modifcation sur les variables
+    modification sur les variables
   \item \c{VAR=( a b c )} pour affecter un tableau
   \item \c{$\{VAR[3]\}} pour lire une value dans un tableau
   \item  Dans un  script  ou  dans une  fonction  shell, les  variable
@@ -406,8 +406,8 @@ $ perl -e print\ \"Hello\ World\\n\"\;
     \begin{lstlisting}
 $ perl -e "print \"Hello World\n\";"
     \end{lstlisting}
-  \item Le \emph{simple quote} \c{'} escape tous les caractère sauf le
-    caractère \c{'} de fin. Il ne peux pas être echappé:
+  \item Le \emph{simple quote} \c{'} échappe tous les caractères sauf le
+    caractère \c{'} de fin. Il ne peux pas être échappé:
     \begin{lstlisting}
 $ perl -e 'print "Hello World\n";'
     \end{lstlisting}
@@ -428,7 +428,7 @@ $ perl -e 'print "Hello World\n";'
       crochets
     \end{itemize}
   \item  Le shell  essaie  de faire  correspondre  tous les  arguments
-    contenant ces metacaractère avec les fichier du répertoire courant
+    contenant ces metacaractères avec les fichier du répertoire courant
   \item ...  il remplace ensuite le  pattern par la  liste des fichier
     correspondants
     \begin{lstlisting}
@@ -457,7 +457,7 @@ $ wc -l *.c
       \c{\\X}
     \item \c{^} \c{$} Début et fin de ligne
     \end{itemize}
-  \item ... voir \man{regex(7)} pour la spécifiction complète
+  \item ... voir \man{regex(7)} pour la spécification complète
   \end{itemize}
   Ainsi:
   \begin{itemize}
@@ -487,9 +487,9 @@ $ wc -l *.c
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les expressions régulières}
-  Les deux implémentations de  moteur d'expression regulières les plus
+  Les deux implémentations de  moteur d'expression régulières les plus
   répandues  sont celles  de  GNU (Gnu  Regular Expression  Processor,
-  \man(grep(1))) et de Perl.
+  \man{grep(1)}) et de Perl (\man{perlreref(3)}).
   \begin{lstlisting}
 $ echo a123b45 | grep -E '^a.*b.*$'
 a123b45
@@ -508,6 +508,18 @@ a1111b1
   \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile=singleslide]{Exemples}
+  Exemples:
+  \begin{itemize} 
+  \item \verb+^[ \t]*\$+: Lignes vides
+  \item            \verb+([0-9]{1,3}\.){3}[0-9]{1,3}+           (PCRE:
+    \verb+(\d{1,3}\.){3}\d{1,3}+): IP
+  \item          \verb+[a-zA-Z]*://[a-zA-Z0-9_/%\.-]*+          (PCRE:
+    \verb+\w*://\S*+): URL
+  \item \verb+^[a-zA-Z_].*\)[^;]*\$+: Définitions de fonctions C
+  \end{itemize} 
+\end{frame} 
+
 \begin{frame}[fragile=singleslide]{Outils dérivés}
   Quelques outils pour travailler avec les expression régulières
   \begin{itemize}
@@ -523,7 +535,7 @@ a1111b1
   \begin{itemize}
   \item Lourd historique
   \item  Il existe(ait)  énormément de  terminaux  différents. Chaque
-    terminal à ses spécificitées:
+    terminal à ses spécificités:
     \begin{itemize}
     \item caractère permettant le retour à la ligne,
     \item possibilité de déplacer le curseur,
@@ -594,8 +606,8 @@ $ jobs
 #!/bin/sed
 #!/usr/bin/make -f
     \end{lstlisting}
-  \item L'OS appelle l'interpreteur et  passer le fichier de script et
-    ses   arguments   en  paramètre.   (Essayez   avec  votre   propre
+  \item L'OS appelle l'interpreteur et  passe le fichier de script et
+    ses   arguments   en  paramètres.   (Essayez   avec  votre   propre
     application)
   \item Il  est possible  de les lancer  en les passant  directement à
     l'interpreteur de commande
@@ -629,9 +641,9 @@ foo() {
 \begin{frame}[fragile=singleslide]{Ecrire des scripts}
   \begin{itemize}
   \item Il est possible de séparer deux commandes par \c{\;}
-  \item La commande \man{test(1)} (ou \man{[(1)}) permet d'interprêter
+  \item La commande \man{test(1)} (ou \man{[(1)}) permet d'interpréter
     des conditions
-  \item Il existe aussi des structures de controle:
+  \item Il existe aussi des structures de contrôle:
     \begin{lstlisting}
 if test -n $VAR; then
   echo '$VAR exist'
@@ -656,7 +668,7 @@ done
     \begin{lstlisting}
 $ cd /h<TAB>/j<TAB>/c<TAB>
     \end{lstlisting}
-  \item Les  shell modernent sont  capables de faire de  la completion
+  \item Les  shell modernes sont  capables de faire de  la completion
     avancée
     \begin{lstlisting}
 $ man l<TAB>
@@ -805,11 +817,11 @@ target%
   \item Il y a des groupe sur le système, gérés dans \file{/etc/group}
   \item  Une  utilisateur  peur  appartenir  à  plusieurs  groupes  et
     plusieurs utilisateurs peuvent appartenir au meme groupe
-  \item Ces utilsateur  et ces groupe sont géré avec  leur UID et leur
+  \item Ces utilisateurs  et ces groupes sont gérés avec  leurs UID et leurs
     GID, \file{/etc/passwd} et  \file{/etc/group} s'occuppent de faire
     la correspondances avec les nom lors de l'affichage
-  \item \emph{root} (UID 0) est l'utilisateur privilègié
-  \item Certaine  fonction ne peuvent  être executé que par  root (par
+  \item \emph{root} (UID 0) est l'utilisateur privilégié
+  \item Certaine  fonction ne peuvent  être exécuté que par  root (par
     exemple: modifier l'horloge, la configuration réseau)
   \item Il existe plusieurs manières pour devenir \c{root}
     \begin{itemize}
@@ -820,6 +832,54 @@ target%
   \item Chaque fichier  du système est associé à  un propriétaire et à
     un groupe
   \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Principes de base des mots de passe}
+\begin{itemize} 
+\item Les mots de passe stockés en clair ne sont pas une bonne idée
+  \begin{itemize}
+  \item time attack 
+  \item problème de l'utilisation du  même mot de passes sur plusieurs
+    systèmes   (peuvent être   utilisé   par  un   attaquant  ou   par
+    l'administrateur)
+  \end{itemize} 
+\item Les  mots de passe  se trouvent dans \file{/etc/passwd}  ou dans
+  \file{/etc/shadow}
+\item Si champ est vide, il est permis de se logger sans mot de passe
+\item  On encode  les mots  de passe  avec un  algorithme non-reversif
+  (type hash)
+\item  Lorsqu'on vérifie  le  mot  de passe,  on  compare les  version
+  encodée
+\item Il est difficile de retrouver le mot de passe d'origine à partir
+  du mot de passe codé.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Principes de base des mots de passe}
+\begin{itemize} 
+\item En revanche, il n'est  pas forément nécessaire d'avoir le mot de
+  passe en clair. On ajoute donc du sel au mot de passe:
+\begin{lstlisting} 
+$ mkpasswd -m des foo ab
+abQ9KY.KfrYrc
+$ mkpasswd -m des foo cd
+cdEPlIkpb3972
+\end{lstlisting} 
+\item Le fichier  \file{/etc/passwd} contient es information obligeant
+  à  laisser les  droits en  lecture à  tous les  utilisateurs  sur ce
+  fichier.
+\item  De plus, le  format du  fichier \file{/etc/passwd}  n'était pas
+  prévu pour être extensible.
+\item   On   a   alors    crée   un   nouveau   format   de   fichier:
+  \file{/etc/shadow}.  Celui-ci accepte plusieurs algorithmes.
+\begin{lstlisting} 
+mkpasswd -m sha-512 foo abcdefgh
+$6$abcdefgh$j0MVxgmPHdViHdU0fAVeXckk8X1/N...
+\end{lstlisting}
+\item Les systèmes à mots de passe restent relativement peu sécurisé à
+  partir du moment ou l'attaquant récupère la version crypté du mot de
+  passe.
+\end{itemize} 
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les droits}
@@ -875,10 +935,10 @@ drwxrwxrwt 13 root root   [...] /tmp
   \item La principale  raison obligeant à être root  pour installer un
     paquet est pour écrire les répertoires appartenant à root.
   \item Un  programme est livré  sous forme d'un paquet  contenant: la
-    binire, la doc et les éventuelles ressources
+    binaire, la documentation et les éventuelles ressources
   \item Il s'agit ni plus  d'une tarball (\c{tar} est utilisé dans les
     \c{.deb} alors que \c{cpio} est utilisé dans les \c{.rpm}).
-  \item  Lors de  la decompression  (\c{dpkg -i},  \c{rpm  -i}, \c{ipk
+  \item  Lors de  la décompression  (\c{dpkg -i},  \c{rpm  -i}, \c{ipk
       -i}),  on écrit dans  une base  de donnée  les nom  des fichiers
     décompressé afin de pouvoir facilement supprimer le paquet
   \item On  ajoute un fichier  normalisé à cette tarball  afin d'avoir
@@ -898,14 +958,14 @@ drwxrwxrwt 13 root root   [...] /tmp
   \item On  peut interroger  la base de  donnée des  fichier installés
     avec (\c{dpkg -l}, \c{dpkg -L}, \c{dpkg -S}, \c{rpm -q})
   \item Afin  de ne pas devoir récupérer  chaque paquets manuellement,
-    on  crée des  dépots  centralisé et  indexé.   Des outils  peuvent
+    on  crée des  dépôts  centralisé et  indexé.   Des outils  peuvent
     interroger ces  bases (\c{apt-get}, \c{urpmi},  \c{yum}, ...).  il
-    peuvent  automatiquement  recupérer  les  dépendance  et  appeller
+    peuvent  automatiquement  récupérer  les  dépendance  et  appeler
     \c{dpkg}/\c{rpm}
   \item Lors  de l'installation,  on note si  le paquet a  été demandé
     explicitement   ou  si   il   a  été   installé   à  cause   d'une
     dépendance.  Lorsqu'un  paquet  n'a  plus d'utilité,  on  peut  le
-    désinstaler automatiquement.
+    désinstaller automatiquement.
   \item     Pleins    d'autres    outils     utiles:    \c{apt-cache},
     \c{apt-get source}, \c{apt-get  source -b}, \c{apt-get builddeps},
     etc...

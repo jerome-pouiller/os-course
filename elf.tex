@@ -20,7 +20,7 @@
 \end{frame}
 
 %% A reformuler, revoir
-\subsection{Exemple}
+\section{Compilation}
 
 \begin{frame}[fragile=singleslide]{Compilation}
   Compilation normale:
@@ -128,6 +128,8 @@ $ ls -l
   \end{itemize}
 \end{frame}
 
+\section{Les bibliothèques}
+
 \begin{frame}[fragile=singleslide]{Les bibliothèques}
   \begin{itemize}
   \item  Afin de  simplifier  le déploiment  des  utilitaires, il  est
@@ -195,15 +197,22 @@ $ ls -l
   \item Le linker doit passer  par cette indirection pour appeller une
     fonction exportée par une biliothèque dynamique.
   \item Il ne peut pas faire  tenir ce morceau de code à l'emplacement
-    laissé par le compilateur
+    laissé par le compilateur (qui  ne fait pas la différence entre un
+    symbole statique et un symbole dynamique)
   \item Il crée  donc un petit morceau de code  qu'il placera dans une
     section \emph{Procedure Linkage Table} (\emph{.plt})
   \item Cette  procedure permet simplement  de brancher vers  la table
     d'indirection.
-    \begin{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+  \begin{center}
+   \pgfimage[width=7cm]{pics/plt_after}
+\end{center}
+\begin{lstlisting}
 $ objdump -d | grep -A 10 "section \.plt"
     \end{lstlisting}
-  \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
@@ -221,6 +230,12 @@ $ objdump -d | grep -A 10 "section \.plt"
   \item   Cela   peut   être   désactivé  en   passant   la   variable
     d'environnement \cmd{LD_BIND_NOW}
   \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
+\begin{center}
+   \pgfimage[width=7cm]{pics/plt_before}
+\end{center}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
@@ -257,6 +272,7 @@ unsigned int sleep(unsigned int s) {
   \end{itemize}
 \end{frame}
 
+\section{Résultats de la compilation}
 % Section: Redistribution? A deplacer apres les outils de compilation?
 
 \begin{frame}[fragile=singleslide]{A qui fournir quoi?}
@@ -309,4 +325,97 @@ hello-static: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statical
   \end{itemize}
 \end{frame}
 
+\section{Makefiles}
+% A étoffer?
 
+\begin{frame}[fragile=singleslide]{Makefile}
+  \begin{itemize} 
+  \item Vieux système (qui a dit ``pourri''?)
+  \item Beaucoup d'implémentations différentes
+  \item Heureusement,  gmake (GNU Make) est quasiment  le seul utilisé
+    de nos jours.
+  \item  \cmd{make}  est finalement  un  interpréteur  qui éxecute  le
+    fichier  nommé  \file{Makefile}  ce  trouvant dans  le  répertoire
+    courant
+  \item  Il existe  de nombreuses  alternatives au  Makefile,  mais ce
+    dernier  a imposé des  standards qui  se retrouvent  dans beaucoup
+    d'autres systèmes (nous en verrons quelques uns plus tard)
+  \end{itemize} 
+\end{frame} 
+
+\begin{frame}[fragile=singleslide]{Bases}
+  \begin{itemize} 
+  \item Principe du fichier \file{Makefile}:
+    \begin{lstlisting} 
+cible: depends
+       rules
+file.o: file.c dep.h
+       gcc file.c -c -o file.o
+    \end{lstlisting} 
+  \item \cmd{make} crée  un graphe de dépendance et  vérifie les dates
+    de modifications  des fichierx afin  de n'éxecuter que  les règles
+    nécessaires
+\item Notez que les dépendances avec les fichiers \file{.h} doivent être déclarées
+  \item Un \file{Makefile} bien écrit ne reconstruit que le nécessaire
+    et n'oublie jamais de reconstruire le nécessaire.
+  \item  Il  est  possible  spécifier  à  make une  ou  des  cibles  à
+    fabriquer. Sinon, il fabriquera la première cible seulement.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les variables}
+  \begin{itemize} 
+  \item Il est possible d'utiliser des variables
+    \begin{lstlisting}
+CC = gcc
+...
+        $(CC) file.c -c -o file.o
+    \end{lstlisting} %$
+  \item Remarquez que la syntaxe des variable est différente du shell.
+  \item ... or, nous appellons du shell à partir des \file{Makefile}
+  \item  Les  variables  peuvent  être  surchargées sur  la  ligne  de
+    commande:
+    \begin{lstlisting}
+$ make CC=special-gcc
+    \end{lstlisting} %$
+  \item  Il  existe de  nombreuses  variables standards,  prédéfinies:
+    \c{CC}, \c{CFLAGS},  \c{LDFLAGS}, \c{CXX}, \c{CXXFLAGS}, \c{MAKE},
+    ...
+  \item  Il existe  aussi des  variables locales  aux  règles: \c{$<},
+    \c{$@}, ....
+  \end{itemize} 
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Makefile}
+  \begin{itemize} 
+  \item  Il  est  possible  de définir  des  règles
+    génériques:
+    \begin{lstlisting} 
+%.o: %.c
+       gcc $< -c -o $@
+file.o: dep.h
+    \end{lstlisting} 
+  \item De plus, il existe de nombreuses règles implicite qui facilite
+    le travail
+  \item  Utilisez  au maximum  les  règles  implicites facilite  votre
+    travail:
+    \begin{lstlisting}
+host$ vi toto.c
+host$ touch Makefile
+host$ make toto
+    \end{lstlisting} %$
+    \item Un bon Makefile est un Makefile court
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les règles \emph{phony}}
+  \begin{itemize} 
+  \item Il est possible de définir des règles \emph{virtuelles} (\emph{phony}) pour simplifier certains traitements
+    \begin{lstlisting}
+all: exec1 exec2
+    \end{lstlisting} 
+  \item  Parmis  les règles  \emph{phony}  très répandues:  \c{clean},
+    \c{distclean},   \c{install},    \c{all},   \c{check},   \c{dist},
+    \c{distcheck}, \c{mrproper}...
+  \end{itemize} 
+\end{frame}
