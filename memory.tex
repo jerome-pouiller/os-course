@@ -18,14 +18,6 @@
   \tableofcontents[currentpart]
 \end{frame}
 
-\section{La mémoire vue du kernel }
-
-\begin{frame}[fragile=singleslide]{La mémoire vue du kernel}
-  TODO: Parler de la séparation 1G/3G. Du slab aussi?
-\end{frame} 
-
-\section{En espace utilisateur}
-
 \subsection{Les différents segments}
 
 \begin{frame}[fragile=singleslide]{Données}
@@ -39,31 +31,55 @@
 \subsection{La pile}
 
 \begin{frame}[fragile=singleslide]{La pile}
-  \begin{itemize}
-  \item Permet d'allouer les variable \emph{auto}.
-  \item = Variable locales au fonction
-  \item La pile système est composée de \emph{frame}
-  \item Chaque appel de fonction ajoute une \emph{frame} à la pile
-  \item Deux registres sont utilisé pour la pile:
-    \begin{itemize}
-    \item Stack Pointer (\c{$sp}): Pointe la tête de la pile
-    \item  Frame Pointer  (\c{$fp})  ou Base  stack pointer  \c{$bp}):
-      Pointe sur (plus ou moins) la base de la frame en cours
-    \end{itemize}
-  \item  On   accède  à  un   variable  locale  en   lisant  l'adresse
-    \c{$fp + #CONSTANTE}
-  \end{itemize}
+  \begin{columns}
+    \begin{column}{6.5cm}
+      \begin{itemize}
+      \item Permet d'allouer les variable \emph{auto}.
+      \item = Variable locales au fonction
+      \item La pile système est composée de \emph{frame}
+      \item Chaque appel de fonction ajoute une \emph{frame} à la pile
+      \item Deux registres sont utilisé pour la pile:
+        \begin{itemize}
+        \item Stack Pointer (\c{$sp}): Pointe la tête de la pile
+        \item  Frame Pointer  (\c{$fp})  ou Base  stack pointer  \c{$bp}):
+          Pointe sur (plus ou moins) la base de la frame en cours
+        \end{itemize}
+      \item On  accède à un variable  locale en lisant  l'adresse \c{$fp + #CONSTANTE}
+      \end{itemize}
+    \end{column}
+    \begin{column}{4cm}
+      \pgfimage[width=5cm]{pics/fig3}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{La pile}
-  \begin{itemize}
-  \item  Lorsque l'on appel  une fonction,  on sauvegarde  le contexte
-    (dont \c{$sp}) à  partir de \c{$sp}, on affecte  \c{$sp} à \c{$fp}
-    et on  ajoute la somme de  la taille du contexte  et des variables
-    allouées localement à \c{$sp}
-  \item Ainsi une allocation locale est très rapide (incrémentation de
-    \c{$sp})
-  \end{itemize}
+\begin{frame}{La pile}
+  \begin{columns}
+    \begin{column}{4cm}
+      \begin{itemize}
+      \item  Lorsque l'on appel  une fonction,  on sauvegarde  le contexte
+        (dont \c{$sp}) à  partir de \c{$sp}, on affecte  \c{$sp} à \c{$fp}
+        et on  ajoute la somme de  la taille du contexte  et des variables
+        allouées localement à \c{$sp}
+      \item Ainsi une allocation locale est très rapide (incrémentation de
+        \c{$sp})
+      \end{itemize}
+    \end{column}
+    \begin{column}{6.5cm}
+      \begin{overprint}
+        \onslide<1>
+        
+        \onslide<2>
+        \pgfimage[width=7cm]{pics/fig3}
+        
+        \onslide<3>
+        \pgfimage[width=7cm]{pics/fig4}
+        
+        \onslide<4>
+        \pgfimage[width=7cm]{pics/fig5}
+      \end{overprint}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Allocation dynamique sur la pile}
@@ -116,27 +132,60 @@ void f(int i) {
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Liste de blocs}
-  \begin{itemize}
-  \item  Les liste  de bloc:  on utilise  une liste  chainée  de blocs
-    libre. Lorsqu'on libére  un bloc, on vérifie si  les blocs voisins
-    sont  libres.   On  les  fusionne  si c'était  le  cas.   Lors  de
-    l'allocation, quatres méthodes:
-    \begin{itemize}
-    \item \emph{First fit} On utilise  le premier bloc assez grand que
-      l'on trouve
-    \item  \emph{Next fit}  Idem  \emph{First fit},  mais  on part  du
-      dernier endroit ou a alloué
-    \item \emph{Best fit} On recherche le bloc disponible de taille la
-      plus proche  de celle nécessaire.  Il s'avère  que cette méthode
-      garantie que l'espace inutilisé est petit et cond inutilisable
-    \item \emph{Worst  fit} Utilise le  plus gros bloc  disponible. En
-      comparaison  de \emph{Best fit},  il ne  permet pas  d'avoir des
-      gros bloc aussi  important, en revanche, il limite  la perte des
-      petit espace.  Paradoxalement, c'est plutot une bonne stratégie.
-    \end{itemize}
-  \item Problème inhérant à cet algorithme: la fragmentation
-  \end{itemize}
+\begin{frame}{Liste de blocs}
+  Les  liste  de   bloc:  on  utilise  une  liste   chainée  de  blocs
+  libre. Lorsqu'on  libére un  bloc, on vérifie  si les  blocs voisins
+  sont libres.  On les fusionne si c'était le cas.
+  \begin{center}
+    \pgfimage[width=10cm]{pics/alloc-freelist}
+  \end{center}
+  Problème inhérant à cet algorithme: la fragmentation
+  \\[2ex]
+  Lors  de l'allocation, quatres méthodes.
+\end{frame}
+
+\begin{frame}{Liste de blocs}
+  \emph{First fit}  On utilise  le premier bloc  assez grand  que l'on
+  trouve
+  \\
+  Exemple (\textbf{A}jout, \textbf{D}elete):
+  \begin{center}
+    \pgfimage[width=10cm]{pics/alloc-firstfit}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Liste de blocs}
+  \emph{Next  fit} Idem  \emph{First  fit}, mais  on  part du  dernier
+  endroit ou a alloué
+  \\
+  Exemple (\textbf{A}jout, \textbf{D}elete):
+  \begin{center}
+    \pgfimage[width=10cm]{pics/alloc-nextfit}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Liste de blocs}
+  \emph{Best fit}  On recherche le  bloc disponible de taille  la plus
+  proche de  celle nécessaire.  Il s'avère que  cette méthode garantie
+  que l'espace inutilisé est petit et cond inutilisable
+  \\
+  Exemple (\textbf{A}jout, \textbf{D}elete):
+  \begin{center}
+    \pgfimage[width=10cm]{pics/alloc-bestfit}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Liste de blocs}
+  \emph{Worst  fit}   Utilise  le   plus  gros  bloc   disponible.  En
+  comparaison de  \emph{Best fit}, il  ne permet pas d'avoir  des gros
+  bloc  aussi important,  en revanche,  il limite  la perte  des petit
+  espace.  Paradoxalement, c'est plutot une bonne stratégie.
+  \\
+  Exemple (\textbf{A}jout, \textbf{D}elete):
+  \begin{center}
+    \pgfimage[width=10cm]{pics/alloc-worstfit}
+  \end{center}
+   Problème inhérant à cet algorithme: la fragmentation
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Allocation binomiale}
@@ -149,6 +198,10 @@ void f(int i) {
   \item Si  aucun bloc de cette  taille est disponible,  on utilise un
     bloc d'ordre supérieur que l'on divise en deux
   \end{itemize}
+  Exemple (\textbf{A}jout, \textbf{D}elete):
+  \begin{center}
+    \pgfimage[width=8cm]{pics/alloc-buddy}
+  \end{center}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les pools de mémoires}
@@ -163,7 +216,7 @@ void f(int i) {
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{brk vs mmap}
+\begin{frame}[fragile=singleslide]{\c{brk} vs \c{mmap}}
   Utilisation de \c{brk} ou de \c{mmap}
   \begin{itemize}
   \item \c{brk} garantie  un espace de mémoire continue  ce qui facile
@@ -189,8 +242,7 @@ void f(int i) {
 \subsection{Les garbages collectors}
 
 \begin{frame}[fragile=singleslide]{Reference counters}
-  \begin{itemize} 
-  \item Reference counting
+ Reference counting
     \begin{itemize} 
     \item  Un référence  counter et  un système  qui associe  à chaque
       objet (ou bloc de mémoire) de mémoire un compteur.
@@ -204,63 +256,79 @@ void f(int i) {
       alors que le compteur est  supérieur à 1, il y a potentiellement
       un problème)
     \end{itemize} 
-  \item Plusieurs manière de l'implémenter:
-    \begin{itemize}
-    \item En C, on  s'interdit les opérateurs d'affectation classiques
-      et on  passe par des fonctions qui  effecturons l'affectation et
-      l'instrumentation.  Très  contraingant,  difficile  de  garantir
-      qu'il n'y a  pas d'autres affectation. Il n'est  pas possible de
-      detecter la destruction d'un pointeur qui se trouve sur la pile.
-    \item  En   C++,  il   est  possible  de   surcharger  l'opérateur
-      d'affectation  pour  rendre  l'opération  transparentes.   Aussi
-      appellé  \emph{smart   pointer}  dans  la   literature.   Classe
-      \c{shared_ptr}            de            libboost.           (cf.
-      \url{http://www.josuttis.com/libbook/cont/countptr.hpp.html})
-    \item Dans une machine virtuelle, ou dans un langage de script, on
-      controle tous  les accès à  la mémoire, donc  ca ne pose  pas de
-      problème
-    \item  \emph{Conservative garbage collector}:  Il est  possible de
-      scanner la mémoire  à la recherche de pattern  ressemblant à des
-      addresses  (double  mots  >  1024).  Il est  ainsi  possible  de
-      retrouver combien de pointeur pointent sur chaque objets. Peuvent générer des faux positifs par 
-      \begin{itemize} 
-      \item Des pattern qui ressemble à des pointeur
-      \item Des pointeurs internes (exemple: heritage d'objets en C++)
-      \end{itemize} 
-      % La  technique  est pas  utilisé comme  garbage
-      % collector, mais  plutôt comme outils  d'instrumentation (Dans le
-      % noyau Linux: kmemleak)
-    \end{itemize}
+  \end{frame}
+
+\begin{frame}[fragile=singleslide]{Reference counters}
+  Plusieurs manière de l'implémenter:
+  \begin{itemize}
+  \item En C, on s'interdit les opérateurs d'affectation classiques et
+    on  passe  par  des  fonctions qui  effecturons  l'affectation  et
+    l'instrumentation.  Très contraingant, difficile de garantir qu'il
+    n'y a pas d'autres affectation.  Il n'est pas possible de detecter
+    la destruction d'un pointeur qui se trouve sur la pile.
+  \item   En  C++,   il   est  possible   de  surcharger   l'opérateur
+    d'affectation   pour  rendre  l'opération   transparentes.   Aussi
+    appellé   \emph{smart  pointer}   dans   la  literature.    Classe
+    \c{shared_ptr}            de            libboost.             (cf.
+    \url{http://www.josuttis.com/libbook/cont/countptr.hpp.html})
+  \item Dans une  machine virtuelle, ou dans un  langage de script, on
+    controle  tous les  accès à  la mémoire,  donc ca  ne pose  pas de
+    problème
+  \end{itemize}
+\end{frame}  
+
+\begin{frame}[fragile=singleslide]{Reference counters}
+  \emph{Conservative garbage collector}: Il est possible de scanner la
+  mémoire  à  la recherche  de  pattern  ressemblant  à des  addresses
+  (double mots > 1024).  Il est ainsi possible de retrouver combien de
+  pointeur  pointent  sur  chaque  objets. Peuvent  générer  des  faux
+  positifs par
+  \begin{itemize} 
+  \item Des pattern qui ressemble à des pointeur
+  \item Des pointeurs internes (exemple: heritage d'objets en C++)
+  \end{itemize} 
+  % La  technique  est pas  utilisé comme  garbage
+  % collector, mais  plutôt comme outils  d'instrumentation (Dans le
+  % noyau Linux: kmemleak)
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Reference counters}
+  \begin{itemize} 
   \item  Problème 1:  Dans  le cas  de  système multiprocesseurs,  les
-    opérations  sur  les  pointeur  doivent être  atomique.  Or  cette
+    opérations  sur  les pointeur  doivent  être  atomique.  Or  cette
     opértion est relativement lente.
   \item Problème 2: les références circulaires
   \item L'ensemble des objets est un graphe orienté. Il est nécessaire
-    de  faire  une  recherche   de  sous-graphe  indépendants.  Si  un
+    de  faire  une  recherche  de  sous-graphe  indépendants.   Si  un
     sousgraphe  n'est référencé  par aucune  variable  globale (.data,
     .rss, etc...) ou locale (pile)
   \item  Il est théoriquement  nécessaire de  faire cette  recherche à
     chaque décrémention  du compteur de référence:  Lent et générateur
     de latence
-   \item Lors de la décrémentation on ajoute l'objet dans la liste des
-     objets à vérifier et on retarde la recherche (aka \emph{tri-color
-       marking}: noir: referencé, gris: à vérifier, blanc: condamné).
-     \item La recherche de sous-graphe se fait alors:
-       \begin{itemize} 
-       \item Lors de  l'allocation ou à un autre  moment définit (stop
-         the  world). Moins  de  perte de  performance, mais  toujours
-         problème de latence
-       \item  Dans  une thread  séparée  (concurent).  Peut créer  des
-         problème d'accès concurrents.  Par forcement possible sur les
-         petit systèmes
-       \item  Incrémentale,  à  chaque  déréférencement  ou  à  chaque
-         période de temps fixe, on parcourt une partie du graphe
+  \item Lors de la décrémentation  on ajoute l'objet dans la liste des
+    objets à vérifier et  on retarde la recherche (aka \emph{tri-color
+      marking}: noir: referencé, gris: à vérifier, blanc: condamné).
   \end{itemize}
-\item On peut  ajouter des heuristiques sur les  objets à scanner. Par
-  exemple: commencer par  les objets les plus jeunes  qui ont surement
-  des durées de vie plus courte que les vieux objets (surement présent
-  pour toute la durée du vie du programme).
-\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Reference counters}
+  \begin{itemize} 
+  \item La recherche de sous-graphe se fait alors:
+    \begin{itemize} 
+    \item Lors de l'allocation ou  à un autre moment définit (stop the
+      world). Moins de perte de performance, mais toujours problème de
+      latence
+    \item  Dans  une  thread  séparée  (concurent).   Peut  créer  des
+      problème  d'accès concurrents.  Par  forcement possible  sur les
+      petit systèmes
+    \item Incrémentale,  à chaque déréférencement ou  à chaque période
+      de temps fixe, on parcourt une partie du graphe
+    \end{itemize}
+  \item On peut ajouter des heuristiques sur les objets à scanner. Par
+    exemple: commencer par les objets les plus jeunes qui ont surement
+    des  durées de  vie plus  courte  que les  vieux objets  (surement
+    présent pour toute la durée du vie du programme).
+  \end{itemize}
 \end{frame} 
 
 

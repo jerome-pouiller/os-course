@@ -212,7 +212,7 @@ int main() {
   \item  Le  gestionnaire d'interruption  complète  la sauvegarde  des
     registres
   \item   Le  gestionnaire  d'interruption   demande  au   PIC  quelle
-    interruption à  été appelée et il  lit dans l'IVT  quelle ISR est
+    interruption à  été appelée  et il lit  dans l'IVT quelle  ISR est
     associée
   \end{enumerate}
 \end{frame}
@@ -222,9 +222,9 @@ int main() {
     \setcounter{enumi}{7}
   \item Le  gestionnaire d'interruption se branche  sur l'ISR associée
     (ici, ISR1)
-  \item L'IRQ du processeur est  acquittée. Les autre IRQ peuvent ainsi
+  \item L'IRQ du processeur est acquittée. Les autre IRQ peuvent ainsi
     être levées
-  \item L'ISR1 lit la  valeur provenant du \emph{Timer} et acquitte
+  \item  L'ISR1 lit la  valeur provenant  du \emph{Timer}  et acquitte
     l'interruption  du \emph{Timer}. Ce  périphérique peut  de nouveau
     lever des IRQ.
   \item Les registres généraux sont restaurés

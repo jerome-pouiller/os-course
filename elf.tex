@@ -54,15 +54,16 @@ Hello World
 \begin{frame}[fragile=singleslide]{La compilation}
   La compilation:
   \begin{itemize}
-  \item Execute le préprocesseur (fichier \file{.i}), puis le compilateur
-    vérifie  la syntaxe,  le typage,  converti le  code  en assembleur
-    (fichier \file{.s}) puis en code objet (fichier \file{.o})
+  \item  Execute   le  préprocesseur  (fichier   \file{.i}),  puis  le
+    compilateur  vérifie la syntaxe,  le typage,  converti le  code en
+    assembleur  (fichier  \file{.s})   puis  en  code  objet  (fichier
+    \file{.o})
   \item L'option \file{-c} est utilisé.
   \item Le compilateur doit connaitre les signature des fonction (afin
     de vérifier correctement le typage).
-  \item Les  fichiers headers  (fichiers \file{.h}) sont  nécessaires pour
-    cette phase
-  \item  \file{-I} permet  de  spécifier des  chemins supplémentaires  où
+  \item  Les fichiers  headers (fichiers  \file{.h})  sont nécessaires
+    pour cette phase
+  \item \file{-I}  permet de spécifier des  chemins supplémentaires où
     rechercher des fichiers headers (par défaut: \file{/usr/include})
   \item Si un fichier est  inclu entre double-quotes, il est recherché
     dans le même répertoire que le source.
@@ -73,15 +74,26 @@ Hello World
 
 \begin{frame}[fragile=singleslide]{Les symboles de debug}
   \begin{itemize}
-  \item \cmd{-g} permet d'ajouter  une section contenant des symboles de
-    debug.
-  \item  Utilisé  spar les  debuggueur  pour  donner des  informations
-    supplémentaire ou pour faire le lien avec les sources.
+  \item \cmd{-g}  permet d'ajouter une section  contenant des symboles
+    de debug
+  \item Utilisés  par les debuggueurs pour  récupérer des informations
+    supplémentaire ou pour faire le lien avec les sources
+  \item  Les sources  ne sont  pas  incluse dans  les informations  de
+    debug.  Seul une  association entre  les adresses  du code  et les
+    lignes du source est incluse.
+  \item  Attention  aux  modifications   des  code  posterieurs  à  la
+    compilation
   \item Cette section n'est pas chargée en mémoire.
-  \item Le format utilisé s'apeller \emph{dwarf} (Debug with Arbitrary
+  \item Le format utilisé s'apelle \emph{dwarf} (Debug with Arbitrary
     Record Format).
-  \item L'option \cmd{-g} ne change pas le code généré:
-    \begin{lstlisting}
+  \item \cmd{strip}  permet de retirer  les section de debug  et autre
+    sections utilisé seulement les opération de link
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les symboles de debug}
+  L'option \cmd{-g} ne change pas le code généré:
+  \begin{lstlisting}
 $ gcc -g -c main.c -o main-dbg.o
 $ gcc -c main.c -o main-rel.o
 $ ls -l
@@ -91,9 +103,9 @@ $ strip *.o
 $ ls -l
 -rw-rw-r-- jpo jpo 2096 Aug 3 16:05 main-rel.o
 -rw-rw-r-- jpo jpo 2096 Aug 3 16:05 main-dbg.o
-    \end{lstlisting}
-  \end{itemize}
+  \end{lstlisting}
 \end{frame}
+
 
 \subsection{Edition de liens}
 
@@ -115,10 +127,10 @@ $ ls -l
   \item  Les endroits  ayant  besoin de  ces fonctions/variables  sont
     remplacés par  des 0 et une  entrée est ajoutée dans  la table des
     \emph{relocation} du fichier objet (cf. \cmd{objdump -R})
-  \item On  appelle le \emph{linker} (\c{gcc} sans  l'option \c{-c}) pour
-    résoudre les symboles
-  \item Le linker connait toutes les fonctions, et toutes les tables de
-    relocation.
+  \item  On appelle  le \emph{linker}  (\c{gcc} sans  l'option \c{-c})
+    pour résoudre les symboles
+  \item Le linker  connait toutes les fonctions, et  toutes les tables
+    de relocation.
   \item Il peut déplacer les  addresses de chargement des fonctions et
     des variables de  manière à les mettre au  plus près des fonctions
     qui  les   appellent  (optimisation  de   l'utilisation  du  cache
@@ -126,6 +138,37 @@ $ ls -l
   \item Une  fois l'agencement des fonctions défini,  le linker résoud
     toutes les entrées des tables de relocations
   \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Placement des symboles de debug}
+  \begin{itemize} 
+  \item Il  est possible de passer  des options au linker  à partir de
+    \cmd{gcc} en utilisant \cmd{-Wl,}
+  \item  Il est  possible  de placer  les  symboles de  debug dans  un
+    fichier séparé.
+  \item Avec l'option \cmd{--build-id=uuid}, il est possible d'ajouter
+    un identifiant à la binaire
+  \end{itemize} 
+  \begin{lstlisting}
+$ gcc -Wl,--build-id=sha1 -g main.c -o main
+$ cp main -o main.dbg
+$ strip --only-keep-debug main.dbg
+$ strip main
+$ objcopy --add-gnu-debuglink=main.dbg main
+$ file main main.dbg
+main:     ELF 64-bit... BuildID[sha1]=0x3adaaacf2906a5d2bfb7d415035d2e2, stripped
+main.dbg: ELF 64-bit... BuildID[sha1]=0x3adaaacf2906a5d2bfb7d415035d2e2, not stripped
+$ objdump -h main main.dbg
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Placement des symboles de debug}
+  Il est possible de livrer  la binaire à laproduction tout en gardont
+  les  symboles de debug  dans un  dépôt séparé.  Il sera  possible de
+  demander  au  debugueur  de  les  utiliser pour  résoudre  des  dump
+  mémoire. L'identifiant  unique nous permet de garantir  que les deux
+  fichiers correspondent bien. On  pourait aussi sauver le code source
+  de l'application afin d'avoir toutes les informations pour debuguer.
 \end{frame}
 
 \section{Les bibliothèques}
@@ -140,15 +183,32 @@ $ ls -l
     (fichier \file{.so}). Nous y reviendrons.
   \item  Il  est  possible  de  spécifier  le  chemin  complet  de  la
     bibliothèque (dynamique ou statique)  ou de laisser le compilateur
-    la trouver  automatiquement avec  la syntaxe \cmd{-lbrary}.  On peut
+    la trouver automatiquement avec la syntaxe \cmd{-lbrary}.  On peut
     dans ce cas lui précisier des chemins supplémentaire ou rechercher
     la bibliothèque avec \cmd{-L}
-  \item  Par  défaut,  le  compilateur  recherchera  les  bibliothèques
+  \item  Par  défaut,  le  compilateur recherchera  les  bibliothèques
     dynamiques, sauf si l'option \cmd{-static} est utilisée
   \item  Le  linker suit  en  fait  une  des recettes  contenues  dans
     \file{/usr/lib/ldscripts/}  (en fonction  des  options passées  au
     linker).   Il   est  possible  de  fabriquer   son  propre  format
     (\cmd{ld -T}) (utile pour générer des firmwares).
+  \item Voir \file{u-boot.lds}.
+  \end{itemize} 
+ % http://www.osdever.net/bkerndev/Docs/basickernel.htm
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les bibliothèques}
+  \begin{itemize} 
+  \item  Les  symboles déclaré dans les scripts
+    de link sont placé aux endroits demandé en mémoire:
+    \begin{lstlisting}
+void *etext;
+printf("My code end at %p", &etext);
+    \end{lstlisting} 
+  \item \cmd{-Map=file} permet de sauver le mapping mémoire utilisé
+    \begin{lstlisting}
+$ gcc -g -Wl,-Map=main.map main.c -o main
+    \end{lstlisting} 
   \end{itemize}
 \end{frame}
 
@@ -156,7 +216,8 @@ $ ls -l
   Problème:
   \begin{itemize}
   \item Les  fichiers objets des bibliothèques  statiques et dynamique
-    ne se compilent pas avec les mêmes options
+    ne  se  compilent  pas  avec  les mêmes  options  (en  particulier
+    \cmd{-fPIC})
   \item  Certaines architectures ne  permettent pas  les bibliothèques
     dynamiques
   \item La  création de bibliothèques  portables peut devenir  un vrai
@@ -233,9 +294,9 @@ $ objdump -d | grep -A 10 "section \.plt"
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
-\begin{center}
-   \pgfimage[width=7cm]{pics/plt_before}
-\end{center}
+  \begin{center}
+    \pgfimage[width=7cm]{pics/plt_before}
+  \end{center}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les bibliothèques dynamiques}
@@ -243,12 +304,12 @@ $ objdump -d | grep -A 10 "section \.plt"
   \item Il est possible de  demander le chargement manuel et dynamique
     des    bibliothèques    et    des    symboles    avec    \c{libdl}
     (\man{dl\_open(3)}, \man{dl\_sym(3)})
-  \item Afin d'accélérer le  chargement, \file{ld.so} utilise un index de
-    bibliothèques présentes  sur le  système.
+  \item Afin d'accélérer le  chargement, \file{ld.so} utilise un index
+    de bibliothèques présentes sur le système.
   \item  Lorsque vous  ajoutez une  bibliothèque, vous  devez appeller
     \man{ldconfig(1)} pour mettre à jour ce cache.
-  \item la variable \cmd{LD_LIBRARY_PATH}  permet d'ajouter un chemin de
-    recherche de biliothèque pour \file{ld.so}.
+  \item la  variable \cmd{LD_LIBRARY_PATH} permet  d'ajouter un chemin
+    de recherche de biliothèque pour \file{ld.so}.
   \end{itemize}
 \end{frame}
 
@@ -355,7 +416,8 @@ file.o: file.c dep.h
   \item \cmd{make} crée  un graphe de dépendance et  vérifie les dates
     de modifications  des fichierx afin  de n'éxecuter que  les règles
     nécessaires
-\item Notez que les dépendances avec les fichiers \file{.h} doivent être déclarées
+  \item Notez que les  dépendances avec les fichiers \file{.h} doivent
+    être déclarées
   \item Un \file{Makefile} bien écrit ne reconstruit que le nécessaire
     et n'oublie jamais de reconstruire le nécessaire.
   \item  Il  est  possible  spécifier  à  make une  ou  des  cibles  à
@@ -410,7 +472,8 @@ host$ make toto
 
 \begin{frame}[fragile=singleslide]{Les règles \emph{phony}}
   \begin{itemize} 
-  \item Il est possible de définir des règles \emph{virtuelles} (\emph{phony}) pour simplifier certains traitements
+  \item  Il  est  possible  de définir  des  règles  \emph{virtuelles}
+    (\emph{phony}) pour simplifier certains traitements
     \begin{lstlisting}
 all: exec1 exec2
     \end{lstlisting} 
