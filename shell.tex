@@ -109,6 +109,15 @@ $ ls -la
   \end{itemize}
 \end{frame}
 
+%     > ls --width 60  # ok, value is "60"
+%     > ls --width=60  # ok, value is "60"
+%     > ls -w60        # ok, value is "60"
+%     > ls -w 60       # ok, value is "60"
+%     > ls -w=60       # unexpected, value is "=60"
+%     > ls -T7 -w60    # ok, value for -T is 7, value for -w is 60
+%     > ls -T7w60      # unexpected, value for -T is "7w60", no -w at all
+
+
 \begin{frame}[fragile=singleslide]{La documentation}
   \begin{itemize}
   \item  \cmd{man  COMMAND} permet  d'accéder  à  la documentation  de
@@ -387,7 +396,7 @@ ls: impossible d'accéder à  non-existant: Aucun fichier ou dossier de ce type
     \c{$1}, \c{$2}, ... correspondent  aux arguments. \c{$*} et \c{$@}
     signifient ``Tous les arguments''
   \item \c{$((21 * 2))} et \c{$[43 - 1]} sont remplacé par le résultat
-    de l'expression aritthmétique
+    de l'expression arithmétique
   \item  \c{$(echo toto)}  ou \c{`echo  toto`} sont  remplacés  par le
     résultat de la commande \c{echo toto}.
   \end{itemize}
@@ -511,9 +520,9 @@ a1111b1
 \begin{frame}[fragile=singleslide]{Exemples}
   Exemples:
   \begin{itemize} 
-  \item \verb+^[ \t]*\$+: Lignes vides
-  \item            \verb+([0-9]{1,3}\.){3}[0-9]{1,3}+           (PCRE:
-    \verb+(\d{1,3}\.){3}\d{1,3}+): IP
+%  \item \verb+^[ \t]*\$+: Lignes vides
+%  \item            \verb+([0-9]{1,3}\.){3}[0-9]{1,3}+           (PCRE:
+%    \verb+(\d{1,3}\.){3}\d{1,3}+): IP
   \item          \verb+[a-zA-Z]*://[a-zA-Z0-9_/%\.-]*+          (PCRE:
     \verb+\w*://\S*+): URL
   \item \verb+^[a-zA-Z_].*\)[^;]*\$+: Définitions de fonctions C

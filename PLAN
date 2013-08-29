@@ -1,3 +1,8 @@
+A ajouter:
+  - argc/argv
+  - read, open, write et les filedescriptor
+  - diff/patch
+
   Objectif: Découvrir les systèmes d'exploitation en se basant sur Linux.
   Pedagogie: On apprend à utiliser Linxu et on généralise certaines connaissance.
 

@@ -517,7 +517,7 @@ $ debugfs -R logdump /dev/sda8
   \end{columns}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{RAID 2}
+\begin{frame}[fragile=singleslide]{RAID 2 et 3}
   \begin{itemize}
   \item Peu utilisé
   \item RAID 2: RAID 0 + ECC sur un disque séparé
@@ -526,7 +526,7 @@ $ debugfs -R logdump /dev/sda8
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{RAID 2}
+\begin{frame}[fragile=singleslide]{RAID 2 et 3}
   \begin{itemize}
   \item La parité se fait au niveau de l'octet.
   \item Les disque doivent être synchrone dans leur déplacement
@@ -540,7 +540,7 @@ $ debugfs -R logdump /dev/sda8
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{RAID 2}
+\begin{frame}[fragile=singleslide]{RAID 3}
   \begin{lstlisting}
 Drive #1: 00101010 (Data)
 Drive #2: 10001110 (Data)
@@ -551,7 +551,7 @@ Drive #6: 11100110 (Parity)
   \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{RAID 2}
+\begin{frame}[fragile=singleslide]{RAID 3}
   \begin{lstlisting}
 Drive #1: 00101010 (Data)
 Drive #2:   dead   (Data)
@@ -562,7 +562,7 @@ Drive #6: 11100110 (Parity)
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{RAID 2}
+\begin{frame}[fragile=singleslide]{RAID 3}
   \begin{lstlisting}
 Drive #1: 00101010 (Data)
 Drive #2:   dead   (Data)
@@ -680,7 +680,7 @@ Drive #6: 00100110 (Parity Q)
 \begin{frame}[fragile=singleslide]{Exemple}
   Après un redémarrage, il faut \emph{réassembler} le RAID:
   \begin{lstlisting}
-# mdadm --assemble /dev/md0 /dev/sda1 /dev/sdb1 /dev/sdc1 /dev/sdd1
+# mdadm --assemble /dev/md0 /dev/sda1 /dev/sdb1 /dev/sdc1
   \end{lstlisting}
   ou  en scannant  les partitions  (chaque élément  du RAID  contient un
   superblock      contenant     un      identifiant      unique     de

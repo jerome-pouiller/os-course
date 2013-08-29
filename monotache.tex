@@ -9,7 +9,7 @@
 %     - Jérôme Pouiller <jezz@sysmic.org>
 %
 
-\part{Fonctionnement monotâches}
+\part{Gestion des évènements}
 
 \begin{frame}
   \partpage
@@ -506,6 +506,195 @@ void unlock(int m) {
     vecteurs),   start.c  (copie  ROM   vers  RAM),   interrupt.c  (en
     particulier intGenlock), main.c (fonction loop)\\}
 \end{frame}
+
+
+\section{Le temps partagé}
+
+\begin{frame}{Concurrence}
+  \begin{itemize}
+  \item   Des   tâches   concurrentes   sont   des   tâches   exécutées
+    séquentiellement sur un seul processeur en entrelaçant l'exécution
+    de chaque tâches
+  \item  Pour les tâches,  le temps  partagé est  transparent.  Chaque
+    tâche à l'impression d'avoir le CPU pour elle-seule
+  \item  On  trouvera aussi  le  terme  de  \emph{multitâches} ou  de
+    \emph{temps partagé}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Concurence}
+   La programmation concurrente N'EST  PAS de la programmation parallèle
+  (même les système multicoeurs sont souvent concurrent et parallèle):
+  \begin{center}
+    \pgfimage[width=10cm]{pics/concurentVsParallel}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Programmation multitâche}
+\begin{lstlisting}
+#include <unistd.h>
+
+int main() {
+  int r;
+
+  r = fork();
+  if (r < 0) {
+     // Error
+  } else if (r > 0) {
+    // Parent
+  } else /* r == 0 */ {
+    // Child
+  }
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Concurrence}
+  Migration d'un système avec gestion asynchrone des interruptions vers
+  un système multitâches:
+  \begin{center}
+    \pgfimage[width=10cm]{pics/model_multitask}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Tâches concurrentes}
+  Pour les  systèmes plus complexes ou pour  facilité la réutilisation,
+  un   système   multitâche   est   plus   approprié   qu'un   système
+  \emph{Foreground/Background}.
+  \begin{itemize}
+  \item Facilite la gestion des évènements
+  \item Permet de prioriser les traitements
+  \end{itemize}
+  \note{Parler  des différentes  états des  tâches ici.  Il  manque un
+    slide avec du code.}
+\end{frame}
+
+\begin{frame}{Etats des tâches}
+  \begin{center}
+    \input{pics/task_states}
+  \end{center}
+\end{frame}
+
+
+\subsection{Changement de contexte}
+
+\begin{frame}{Le changement de contexte}
+  Chaque tâche possède une pile en mémoire. Une liste globale contient:
+  \note{Faire un schéma}
+  \begin{itemize}
+  \item les états de toutes les tâches
+  \item l'emplacement de la pile en mémoire
+  \item le contexte d'exécution, c'est-à-dire une sauvegarde des registres
+  \end{itemize}
+  Lors du changement de contexte
+  \begin{itemize}
+  \item  on  sauvegarde  le   contexte  de  la  tâche  précédente,  en
+    particulier son pointeur de pile et son pointeur d'instruction
+  \item on restaure le contexte de la nouvelle tâche
+  \item on restaure le pointeur d'instruction
+  \end{itemize}
+  Dans la  pratique, il y a  des petites subtilités  dépendantes de la
+  manière dont le changement de contexte à été amené.
+\end{frame}
+
+\begin{frame}{Le changement de contexte}
+  \begin{center}
+    \pgfimage[width=7cm]{pics/context_switch}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Multitâche non-préemptif}
+  Le changement de contexte  peut-être volontaire par les tâches. Dans
+  ce   cas,  la   tâche   ayant  terminé   son  traitement   appellera
+  explicitement   la  fonction   \emph{schedule}   qui  effectuera   la
+  changement  de   contexte.  le  système  est   dit  non-péemptif  ou
+  multitâche collaboratif.
+\end{frame}
+
+\begin{frame}{Multitâche non-préemptif}
+  Ce type  de système implique une  latence difficilement quantifiable
+  entre un évènement et sont traitement:
+  \begin{center}
+    \pgfimage[width=7cm]{pics/preemptive-no}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Multitâche non-préemptif}
+  \begin{enumerate}
+  \item  Une tâche  non prioritaire  est en  cours d'exécution  et est
+    interrompue par un évènement (une IRQ)
+  \item L'ISR est appellé
+  \item Le traitement  l'IRQ rend une tâche de  haute priorité prête à
+    être exécutée
+  \item  A  la fin  de  l'ISR,  le système  rend  le  CPU  à la  tâche
+    non-prioritaire
+  \item Quand  la tâche non-prioritaire termine  sont traitement, elle
+    appelle \texttt{schedule}
+  \item L'ordonnanceur donne la main à la tâche de forte priorité
+  \item La tâche de haute priorité peut (enfin) s'exécuter
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Multitâche préemptif}
+  Un  système  multitâche préemptif  va  être  capable  de changer  de
+  contexte lors des interruptions:
+  \begin{center}
+    \pgfimage[width=10cm]{pics/preemptive-yes}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Multitâche préemptif}
+  \begin{enumerate}
+  \item  Une tâche  non prioritaire  est en  cours d'exécution  et est
+    interrompue par un évènement (une IRQ)
+  \item L'ISR est appelée
+  \item Le traitement  l'IRQ rend une tâche de  haute priorité prête à
+    être exécutée
+  \item A la fin de l'ISR, le système appel le scheduler
+  \item Le scheduler donne la main a la tâche de haute priorité
+  \item  Quand  la tâche  prioritaire  termine  sont traitement,  elle
+    appelle \texttt{schedule}
+  \item   Vu  qu'il  n'y   a  plus   tâche  prioritaire   à  exécuter,
+    l'ordonnanceur redonne la main à la tâche de faible priorité
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Le changement de contexte sur interruption}
+  \begin{center}
+    \pgfimage[width=10cm]{pics/interuption-2}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Round robin}
+  Examinons  le cas de  deux tâches  de priorité  égales n'effectuant
+  jamais de relanchement volontaire:
+  \begin{lstlisting}
+task1() {
+  for(;;) ;
+}
+task2() {
+  for(;;) ;
+}
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Round robin}
+  Dans ce cas, si aucune interruption ne se produit, la première tâche
+  à avoir pris la main ne la rendra jamais. Afin de reprendre la main,
+  on  utilise une  interruption  d'horloge.  Celle-ci  garanti que  le
+  système  pourra périodiquement  reordonnancer les  tâches.  La période
+  l'horloge utilisée est appelée quantum de temps ou HZ dans le cas de
+  Linux.
+
+  Dans   ce  cas-ci,   l'ordonnanceur  devra   donner  une   période  à
+  \emph{task1} puis une période à  \emph{task2} et ainsi de suite.  Ce
+  comportement s'appelle \emph{Round-Robin} ou \emph{Tourniquet}.
+  \begin{center}
+    \input{pics/round_robin}
+  \end{center}
+\end{frame}
+
+
 
 % \section{Biographie}
 
