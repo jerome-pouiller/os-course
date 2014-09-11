@@ -1,0 +1,113 @@
+%
+% This document is available under the Creative Commons Attribution-ShareAlike
+% License; additional terms may apply. See
+%   * http://creativecommons.org/licenses/by-sa/3.0/
+%   * http://creativecommons.org/licenses/by-sa/3.0/legalcode
+%
+% Copyright 2010 Jérôme Pouiller <jezz@sysmic.org>
+%
+
+% Pour faire une version imprimable, avec les notes sans overlay
+% \PassOptionsToClass{notes=show,handout}{beamer}
+% Pour en faire un article:
+% \documentclass[10pt,ucs,usepdftitle=false,a4paper]{article}
+% \usepackage{beamerarticle}
+
+\documentclass[10pt,ucs,usepdftitle=false]{beamer}
+
+% Pour mettre deux pages sur une
+% (Préférer l'utilisation d'un post processing)
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{2 on 1}[a4paper,border shrink=5mm]
+%\pgfpagesuselayout{4 on 1}[a4paper,landscape, border shrink=5mm]
+%\setbeameroption{show notes on second screen=right}
+
+\input{style}
+
+% Apparait sur chaque slide:
+%\logo{\pgfimage[height=5mm]{pics/logo}}
+
+\title{Systèmes d'exploitation embarqués}
+\hypersetup{pdftitle={Systèmes d'exploitation embarqués}}
+% \subtitle{Sous-titre}
+\author[Sysmic - J. Pouiller]{Jérôme Pouiller \email{j.pouiller@sysmic.org}}
+\hypersetup{pdfauthor={Sysmic - Jérôme Pouiller}}
+\institute[Sysmic]{}
+%\institute[Sysmic]{\hspace*{1cm}\pgfimage[height=1.5cm]{pics/logo}}
+% Plus complet:
+% \institute[Sysmic]{
+%   \inst{1} \hspace*{1cm}\includegraphics[height=1.5cm]{pics/logo}
+%   \and
+%   \inst{2} \includegraphics[height=1.5cm]{pics/logo-quiris}
+% }
+%\date[Juin 2012]{Juin 2012}
+\date{}
+% Pour le PDF seulement:
+\subject{Systèmes d'exploitation}
+\keywords{Linux}
+  
+\begin{document}
+
+  \begin{frame}[plain]
+    \maketitle
+    \note[item]{Parler de moi, de mon CV, freelance, sysmic, expertise, Polytech Paris, Tours, Insa Rennes}
+  \end{frame}
+
+  % OLD:
+  % 200 slides -> 320 slides
+  % 0-2 Systèmes de compilation 1/2 (2h)
+  % 2-4 Systèmes de compilation 2/2 (1h)
+  % 4-6 Boot
+  % 6-8 Fabrication de Linux 
+  % 8-10 Drivers
+  % 10-12 Debug
+  % 12-14 
+  % 14-16 
+
+  \begin{frame}{Sommaire}
+    \begin{itemize} 
+      \item Gestion des taches % 2h
+      \item Gestion de la mémoire système % 2h
+      \item Gestion de la mémoire applicative % 2h
+      \item Systèmes de compilations croisées % 4h 
+      \item Le démarrage % ?h 
+      \item Assemblage des diverses briques de l'OS % 4h
+      \item Ecriture de drivers % 2h
+      %\item Virtualisation % 1h
+    \end{itemize} 
+  \end{frame}
+
+
+\include{monotache}
+  % Il faut 240 slides:
+  % Fonctionnement de la segmentation et de la pagination
+\include{system-memory}
+  % Algorithme de gestion de la mémoire
+  % Les IPC: Bus logiciel, etc...
+\include{user-memory}
+  % Fonctionnement des drivers: Char dev, etc... ?
+%\include{drivers1}
+  % Monolithique/micro, archi Linux, serveurs, bibliothèque, etc...
+\include{archi}
+  % Systèmes de compilation: Make, autotools, cmake
+%\include{compil}
+  % Boot: A ecrire! : chargement en memoire, bootloader, kernel, head.S, start_kernel (init/main.c), initrd, rootfs (root=, /bin/init, /etc/inittab, /etc/rcS. /etc/init.d(beurk)), initrd (pour les drivers), boot nfs, boot tftp, mtd/jffs2, ubi
+\include{boot}
+  % Fabrication de Linux : kernel, buildroot, toolchain (glibc/uclibc, etc...), mtd
+\include{make-elinux}
+  % Drivers/modules, udev
+\include{drivers}
+  % Api Kernel
+%\include{api}
+  % Debug
+%\include{debug}
+  % Virtualisation (chroot/pivot_root, namespace, lxc, qemu/javascript/java/dotnet/lwm, qemu-system/kvm)
+%\include{virtual}
+
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
