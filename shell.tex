@@ -56,7 +56,7 @@ $ mkdir dir1 dir2
     \end{lstlisting} %$
   \item Conséquence: les espaces sont des caractères spéciaux en shell
   \item  Les  arguments sont  reçus  par  le  programme par  les  deux
-    arguments \c{argc} et \c{argv}
+    arguments \c{argc} et \c{argv} (cf. \c{argv.c})
   \item  Remarque: certaines commandes  ont un  comportement différent
     suivant \c{argv[0]} (exemple: \c{test} et \c{[})
   \end{itemize}
@@ -232,11 +232,11 @@ $ mkdir tmp/titi
       fichier}).
   \item Il s'agit d'un identifiant pour une structure dans l'OS.
   \item  Le file  descriptor peut  être passé  à d'autre  fonctions du
-    système comme \man{read(3)} ou \man{write(3)}.
+    système comme \man{read(3)} ou \man{write(3)} (cf. \c{fd.c}).
   \item  Nous   verrons  plus  tard  que  le   concept  de  \emph{file
       descriptor} va plus loin
   \item  Les couche basses  de l'OS  ouvre automatiquement  trois file
-    descriptor lors qu'un programme est lancé:
+  descriptor lors qu'un programme est lancé (cf. \c{fd.c}):
     \begin{itemize}
     \item    Entrée    standard     (numéro    0),    accessible    en
       lecture. Normalement reliée au clavier.
