@@ -1,0 +1,55 @@
+
+
+I'm doing a (free) operating system (just a hobby, won't be big and
+professional like gnu) for 386(486) AT clones. -- Torvalds, Linus (1991-08-25).
+
+http://xkcd.com/149/ (make me a sandwitch)
+
+http://xkcd.com/386/ (someone has wrong on internet)
+
+http://xkcd.com/378/ (M-x butterfly)
+
+There are only 10 kinds of people in this world: those who know binary and
+those who don’t.
+
+Real Programmers don't comment their code. If it was hard to write, it should
+be hard to understand.
+
+Q. How did the programmer die in the shower?
+A. He read the shampoo bottle instructions: Lather. Rinse. Repeat. 
+
+It's not a bug, its a feature
+
+“Knock, knock.”
+“Who’s there?”
+very long pause….
+“Java.”
+
+Why do programmers always mix up Halloween and Christmas?
+Because Oct 31 equals Dec 25.
+
+"The first 90 percent of the code accounts for the first 90 percent of the
+development time. The remaining 10 percent of the code accounts for the other
+90 percent of the development time."        -- Tom Cargill, Bell Labs
+
+Talk is cheap. Show me the code. -- Torvalds, Linus (2000-08-25). Message to
+linux-kernel mailing list. Retrieved on 2006-08-28.
+
+Q: How many programmers does it take to change a light bulb?
+A: None – It’s a hardware problem
+
+"Regression testing"? What's that? If it compiles, it is good; if it boots up,
+it is perfect. -- Torvalds, Linus (1998-04-08).
+
+Really, I'm not out to destroy Microsoft. That will just be a completely
+unintentional side effect.      -- "The Way We Live Now: Questions for Linus
+Torvalds". New York Times. 2003-09-28.
+
+"Hofstadter's Law: It always takes longer than you expect, even when you take
+into account Hofstadter's Law." — Douglas Hofstadter, Gödel, Escher, Bach: An
+
+Rules for a engineer
+  - Murphy
+  - Pareto (80/20)
+
+

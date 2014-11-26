@@ -48,10 +48,22 @@
   
 \begin{document}
 
-  \begin{frame}[plain]
-    \maketitle
-    \note[item]{Parler de moi, de mon CV, freelance, sysmic, expertise, Polytech Paris, Tours, Insa Rennes}
-  \end{frame}
+{
+\setbeamertemplate{background canvas}{}
+\begin{frame}[plain]
+  \maketitle
+  \begin{textblock}{10}(6,11)
+    %\includegraphics[height=30mm,width=30mm]{sandwich}
+    \begin{quote}
+      \rmfamily\textit\textbf\color{darkgray}{\large
+      ``I'm doing a (free) operating system (just a hobby, won't be big and
+      professional like gnu) for 386(486) AT clones.''}
+        \vskip3mm\hspace*\fill{\small--- Linus Torvalds (1991-08-25)}
+    \end{quote}
+  \end{textblock}
+  \note[item]{Parler de moi, de mon CV, freelance, sysmic, expertise, Polytech Paris, Tours, Insa Rennes}
+\end{frame}
+}
 
   % -360 slides- -> 240 slides
   % 0-2 Intro, Shell (ca va déborder de 15min)
