@@ -36,7 +36,7 @@
 \subsection{Compilation du noyau}
 
 \begin{frame}[fragile=singleslide]{Récupération des sources}
-  Ou récupérer les sources du noyau?
+  Où récupérer les sources du noyau?
   \begin{enumerate}
   \item Utiliser  les sources souvent fournies.  Il arrive souvent
     qu'elles  contiennent  des  drivers particuliers  et  qu'elles
@@ -46,8 +46,8 @@
   \end{enumerate}
   \note[item]{Fonctionne aussi avec 2.6.37}
   \begin{lstlisting}
-host$ wget http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.33.7.tar.bz2
-host$ tar xvjf linux-2.6.33.7.tar.bz2
+host$ wget http://www.kernel.org/pub/linux/kernel/v3.X/linux-3.10.32.tar.bz2
+host$ tar xvjf linux-3.10.32.tar.bz2
   \end{lstlisting}
 \end{frame}
 
@@ -62,29 +62,29 @@ host$ make O=build ARCH=arm CROSS_COMPILE=arm-linux- menuconfig
      \item  Beaucoup d'options,  mais il  y a  l'aide (\verb+<h>+)  et la
        recherche (\verb+</>+)
     \item La configuration est sauvée dans \file{.config}
-    \item    \verb+usb-a9260_defconfig+   permet   de    charger   une
+    \item    \verb+at91sam9263_defconfig+   permet   de    charger   une
       configuration pré-établie pour notre carte
       \begin{lstlisting}
-host$ make O=build ARCH=arm CROSS_COMPILE=arm-linux- usb-a9260_defconfig
+host$ make O=build ARCH=arm CROSS_COMPILE=arm-linux- at91sam9263_defconfig
       \end{lstlisting}
     \begin{itemize}
     \item Certains constructeur vous  fournirons un patch ajoutant une
       cible \verb+_defconfig+
-    \item D'autre vous fournirons un \file{.config}
+    \item D'autres vous fournirons un \file{.config}
     \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Compilation du noyau}
   \begin{itemize}
-  \item Verifier les options du type de processeur
+  \item Vérifier les options du type de processeur
   \item Cocher NFS
-  \item Le reste ne devrait pas empecher ce demarrer votre cible
-  \item La compialtion se lance avec
+  \item Le reste ne devrait pas empêcher de démarrer votre cible
+  \item La compilation se lance avec
     \begin{lstlisting}
-host$ make XXImage
+host$ make O=build ARCH=arm CROSS_COMPILE=arm-linux- XXImage
     \end{lstlisting}
-  \item \verb+XX+ fait reference au format de la binaire produite:
+  \item \verb+XX+ fait référence au format de la binaire produite:
     \begin{itemize}
     \item Le premier octet est-il du code?
     \item Respecte-t-il le format ELF?
@@ -100,23 +100,15 @@ host$ make XXImage
   \begin{itemize}
   \item Compilation
     \begin{lstlisting}
-host% apt-get install uboot-mkimage
+host% apt-get install u-boot-tools
 host$ make O=build ARCH=arm CROSS_COMPILE=arm-linux- uImage
     \end{lstlisting}
   \item Partage de l'image par TFTP
     \begin{lstlisting}
-host% cp build/arch/arm/boot/uImage /srv/tftp/uImage-2.6.33.7
-host% ln -s uImage-2.6.33.7 /srv/tftp/uImage
-    \end{lstlisting} % $
-  \item  Au   redémarrage,  le   bootloader  passe  par   un  registre
-    l'identifiant  de   la  carte.   Cet   identifiant  (spécifique  à
-    l'architecture ARM) est erroné. A  ce stade, il est plus facile de
-    corriger   ce   problème   dans   le   noyau   dans   le   fichier
-    \file{arch/arm/tools/mach-types}.
+host% cp build/arch/arm/boot/uImage /var/lib/tftpboot/
+    \end{lstlisting} % $ 
     \note[item]{C'est mieux de compiler avec -j3}
     \note[item]{Il faut les laisser démarrer en NFS}
-    \note[item]{Il faut  commenter la ligne  1108 et changer  la ligne
-      1700}
   \end{itemize}
   \note{Parler de l'installation des modules et de l'option INSTALL\_MOD\_PATH}
 \end{frame}
@@ -125,21 +117,20 @@ host% ln -s uImage-2.6.33.7 /srv/tftp/uImage
   Fichiers produits (ou productibles) par la compilation:
   \begin{itemize}
   \item  \verb+vmlinux+:  L'image  ELF  du  noyau.   Lisible  par  les
-    debugueurs, certains flasheurs, certain bootloaders
-  \item  \verb+vmlinuz+: parfois  équivalent  du \verb+bzImage+,  mais
-    normalement, il  s'agit de\verb+vmlinux+ compressé  et strippé des
-    informations inutiles  au démarrage. Inutilisable  dans l'état, il
-    est nécéssaire de lui adjoindre un bootloader pour le décompresser
-    et l'éxecuter.
+    debugueurs, certains flasheurs, certains bootloaders
   \item  \verb+Image+:  \verb+vmlinux+   strippé  et  préfixé  par  un
     mini-bootloader   permettant    de   sauter   sur    la   fonction
     \verb+start_kernel+ de \verb+vmlinux+.
-  \item  \verb+bzImage+  et   \verb+zImage+:  \verb+vmlinuz+  avec  le
-    bootloader \cmd{bz2} ou \cmd{gz}.
+  \item  \verb+bzImage+  et   \verb+zImage+: Comme \verb+Image+ mais compressé en \cmd{bz2} ou \cmd{gz}.
+  \item  \verb+vmlinuz+: Normalement  équivalent  du \verb+bzImage+.
+    %normalement, il  s'agit de\verb+vmlinux+ compressé  et strippé des
+    %informations inutiles  au démarrage. Inutilisable  dans l'état, il
+    %est nécessaire de lui adjoindre un bootloader pour le décompresser
+    %et l'exécuter.
   \item  \verb+xipImage+  :  Idem  \verb+Image+ mais  destiné  à  être
-    éxecuté  directement  sur un  \emph{eeprom}  sans  être copier  en
+    exécuté  directement  sur un  \emph{eeprom}  sans  être copier  en
     mémoire au préalable.
-  \item  \verb+uImage+:  \verb+Image+ avec  une  entête spéciale  pour
+  \item  \verb+uImage+:  \verb+zImage+ avec  une  entête spéciale  pour
     \emph{u-boot}.
   \end{itemize}
 %   Il est possible  de générer des image au  format SRecord en utiliant
@@ -150,7 +141,6 @@ host% ln -s uImage-2.6.33.7 /srv/tftp/uImage
   \note[item]{Reprendre le  slide de freeelectron très  bien foutu sur
     le sujet}
 \end{frame}
-
 
 \subsection{Création de l'init}
 
@@ -253,8 +243,8 @@ host$ arm-linux-ldd --root . hello-arm
     \item Copie
     \begin{lstlisting}
 host$ mkdir lib
-host$ cp /opt/arm-linux-.../lib/ld-uClibc-0.9.30.2.so lib
-host$ cp /opt/arm-linux-.../lib/libuClibc-0.9.30.2.so lib
+host$ cp /opt/arm-linux-.../lib/ld-uClibc-1.0.9.so lib
+host$ cp /opt/arm-linux-.../lib/libuClibc-1.0.9.so lib
     \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -290,13 +280,12 @@ host$ ldconfig -r .
     souvent des option non-implémentés ou des comportements différents
   \item Téléchargement
     \begin{lstlisting}
-host$ wget http://busybox.net/downloads/busybox-1.18.3.tar.bz2
-host$ tar xvjf busybox-1.18.3.tar.bz2
+host$ wget http://busybox.net/downloads/busybox-1.23.2.tar.bz2
+host$ tar xvjf busybox-1.23.2.tar.bz2
 host$ mkdir build
     \end{lstlisting}
   \item On retrouve \cmd{Kconfig}
     \begin{lstlisting}
-host$ make O=build CROSS_COMPILE=arm-linux- allnoconfig
 host$ make O=build CROSS_COMPILE=arm-linux- menuconfig
     \end{lstlisting}
   \end{itemize}
@@ -306,58 +295,37 @@ host$ make O=build CROSS_COMPILE=arm-linux- menuconfig
   \begin{itemize}
   \item On trouve pleins d'outils
     \note[item]{TODO: mettre en plusieurs colonnes}
-  \item    Au   minimum,    cochons    \cmd{ash},   \cmd{init},    les
-    \emph{Coreutils},    \cmd{dmesg},   \cmd{ifconfig},   \cmd{mount},
-    \cmd{tftp}, \cmd{tar}, \cmd{reboot}, \cmd{vi}, \cmd{flashcp}
+  \item    Au   minimum,    vérifions les options    \cmd{ash},   \cmd{init},    les
+    \emph{Coreutils}
+  \item Vérifions le chemin d'installation
+    %\cmd{dmesg},   \cmd{ifconfig},   \cmd{mount},
+    %\cmd{tftp}, \cmd{tar}, \cmd{reboot}, \cmd{vi}, \cmd{flashcp}
     \note[item]{TODO: mettre en plusieurs colonnes}
-  \item         Et         aussi:        \verb+CONFIG_PLATFORM_LINUX+,
-    \verb+CONFIG_FEATURE_EDITING+,        \verb+CONFIG_FEATURE_DEVPTS+,
-    \verb+CONFIG_LONG_OPTS+,                  \verb+CONFIG_SHOW_USAGE+,
-    \verb+FEATURE_VERBOSE_CP_MESSAGE+, \verb+IOCTL_HEX2STR_ERROR+
+  %\item         Et         aussi:        \verb+CONFIG_PLATFORM_LINUX+,
+  %  \verb+CONFIG_FEATURE_EDITING+,        \verb+CONFIG_FEATURE_DEVPTS+,
+  %  \verb+CONFIG_LONG_OPTS+,                  \verb+CONFIG_SHOW_USAGE+,
+  %  \verb+FEATURE_VERBOSE_CP_MESSAGE+, \verb+IOCTL_HEX2STR_ERROR+
   \end{itemize}
   \note[item]{TODO P2 Lister de manière exaustive}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Installation de Busybox}
   \begin{itemize}
-  \item Configurons le chemin de destination vers \file{../install}
+  \item Configurons le chemin de destination vers \file{\~/nfs}
     \begin{lstlisting}
 host$ make O=build CROSS_COMPILE=arm-linux-
-host$ make O=build CROSS_COMPILE=arm-linux- install
+host$ make O=build CROSS_COMPILE=arm-linux- CONFIG_PREFIX=~/nfs install
     \end{lstlisting}
     \note[item]{Compiler avec -j3}
   \item  L'installation créé  des  liens symboliques  vers la  binaire
     \cmd{busybox}
   \item  Sans  Busybox,  toutes  ces  binaires  seraient  séparées  et
     dispersées sur une dizaine de sources
-  \item Nous pouvons maintenant démarrer avec \verb+init=/sbin/sh+
+  \item Nous pouvons maintenant démarrer avec \verb+init=/bin/sh+
     \note[item] {Démarrer avec  console=ttyS0,115200 afin d'éviter les
       problème avec le jobs: Non ca ne marche pas}
-  \item \verb+init=/bin/init+ pose encore quelques problèmes.
+  \item \verb+init=/sbin/init+ pose encore quelques problèmes.
   \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile=singleslide]{Compilons init}{Fichiers device}
-  Ajoutons  les devices  \file{/dev/tty}  (En fait,  pas  tout à  fait
-  obligatoire)
-  \begin{lstlisting}
-host% mknod dev/ttyS0 c 4 64
-host% mknod dev/tty2 c 4 2
-host% mknod dev/tty3 c 4 3
-host% mknod dev/tty4 c 4 4
-  \end{lstlisting}
-  \note[item]{tester  avec console=ttyS0,115200  et retirer  cette section : Non, ca ne marche pas}
-%   \item \cmd{MAKEDEV} automatise une partie de la création des fichiers
-%     devices
-%     \note[item]{TODO Voir si on ne  peut pas continuer sans MAKEDEV et
-%       l'introduire dans la section "Ajouts"}
-%     \begin{lstlisting}
-% host% cd dev
-% host% MAKEDEV std
-% host% MAKEDEV console
-%     \end{lstlisting}
-  Nous  pouvons  maintenant  démarrer avec  \cmd{init=/bin/init}  mais
-  certaines fonctionnalités sont absentes (\cmd{ps}, etc... )
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Configuration de \cmd{init}}
@@ -366,7 +334,7 @@ host% mknod dev/tty4 c 4 4
   \begin{itemize}
   \item Lancement automatique d'un shell
     \begin{lstlisting}
-host$ echo "ttyS0::askfirst:/bin/sh" > etc/inittab
+host$ echo "::askfirst:/bin/sh" > etc/inittab 
     \end{lstlisting}
   \item Appel d'un script de démarrage.
     \begin{lstlisting}
@@ -385,6 +353,9 @@ host$ chmod +x etc/init.d/rcS
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Compilons init}{Fichiers de configuration}
+  Nous  pouvons  maintenant  démarrer avec  \cmd{init=/bin/init}  mais
+  certaines fonctionnalités sont absentes (\cmd{ps}, \cmd{ifconfig}, 
+  \cmd{top}, \cmd{lsusb}, etc... )\\
   Il faut monter les partitions \cmd{/proc} et \cmd{/sys}:
   \begin{lstlisting}
 target% mount -t proc none /proc
@@ -392,8 +363,8 @@ target% mount -t sysfs none /sys
   \end{lstlisting}
   Automatisation du montage avec \file{inittab}:
   \begin{lstlisting}
-host$ echo "::sysinit:mount -t proc none /proc" >> etc/inittab
-host$ echo "::sysinit:mount -t sysfs none /sys" >> etc/inittab
+host$ echo "::sysinit:/bin/mount -t proc none /proc" >> etc/inittab 
+host$ echo "::sysinit:/bin/mount -t sysfs none /sys" >> etc/inittab 
   \end{lstlisting}
   Nos commandes semblent maintenant correctement fonctionner.
 \end{frame}
