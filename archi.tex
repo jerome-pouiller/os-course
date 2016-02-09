@@ -20,7 +20,7 @@
 
 \begin{frame}[fragile=singleslide]{Qu'est-ce qu'un noyau?}
   Un ensemble de services nécessitant une gestion centralisée
-  \begin{itemize} 
+  \begin{itemize}
   \item Ordonnanceur
   \item Gestionnaire de mémoire
   \item Drivers
@@ -28,17 +28,17 @@
     Réseau, les cache de disques, affichage vidéo
   \item  Les API  permettant  de communiquer  avec l'ordonnanceur,  le
     gestionnaire de mémoire (IPC, etc...) et les drivers
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Qu'est-ce qu'un OS}
   Caractéristiques similaires au noyau (ordonnanceur, API, etc..) mais
   regroupe :
-  \begin{itemize} 
+  \begin{itemize}
   \item Les services fournis par le noyau
   \item Les  services fournis par des programmes  et des bibliothèques
     extérieures
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Composants de Linux}
@@ -47,7 +47,7 @@
   \begin{center}
     \begin{tikzpicture}
       \filldraw[cbrown]
-       (-0.05,0.95) -- +(9,0) -- +(9,1) -- +(8,1) -- +(8,2) -- +(7,2) -- +(7,3) 
+       (-0.05,0.95) -- +(9,0) -- +(9,1) -- +(8,1) -- +(8,2) -- +(7,2) -- +(7,3)
        -- +(6,3) -- +(6,4) -- +(2,4) -- +(2,3) -- +(1,3) -- +(1,1) -- +(+0,1) -- cycle;
 % node {Posix};
      \filldraw[ccyan]
@@ -81,18 +81,18 @@
 
 \begin{frame}[fragile=singleslide]{Différents types d'architectures}
   On distingue alors:
-  \begin{itemize} 
+  \begin{itemize}
   \item  Les noyaux monolithiques.  Les drivers  et les  services sont
     gérés  dans un  même espace  mémoire.  Tous les  service du  noyau
     s'éxecute en superviseur.
   \item Les  micro-noyaux. Les drivers  et service s'éxecute  dans des
     contextes mémoire différents avec des accès restreints au système.
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Différents types d'architectures}
   Quelques remarques:
-  \begin{itemize} 
+  \begin{itemize}
   \item   Les  micro-noyaux   sont  plus   robustes  aux   erreurs  de
     développement des drivers
   \item Les micro-noyau possèdent peu d'appels systèmes
@@ -101,12 +101,12 @@
   \item Les micro-noyau sont  plus complexe à architecturer. Tellement
     complexes  qu'il  n'existe pas  d'exemple  de micro-noyau  s'étant
     développé sur des architecture riches
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
 
 \begin{frame}[fragile=singleslide]{Différents types d'architectures}
-  \begin{itemize} 
+  \begin{itemize}
   \item XNU  (le noyau de MacOSX)  est un noyau  monolithique basé sur
     Mach 3 (monolithique aussi)
   \item Hurd, Beos et Mach 4, sont des micro-noyau (peu connus)
@@ -117,18 +117,18 @@
     partiulier les driver USB),  mais les drivers principaux sont dans
     le noyau (graphique, son, etc...)
   \item Linux est un noyau monolithique modulaire.
-    \begin{itemize} 
+    \begin{itemize}
     \item Débat Tanenbaum–Torvalds
     \item \url{http://groups.google.com/group/comp.os.minix/browse_thread/thread/c25870d7a41696d2}
     \item Modulaire depuis  la  version  2.6
-    \end{itemize} 
+    \end{itemize}
   \item  Linux  permet  de  développer  certains types  de  drivers  à
     l'extérieur du noyau, mais ca  n'est pas son objectif et il montre
     rapidement ses limitations dans  le domaine (Serveur X, Fuse, UIO,
     CUPS, sane, libusb, etc...).
-\end{itemize} 
+\end{itemize}
 
-\end{frame} 
+\end{frame}
 
 % Environs 10 slides -> 30min
 
@@ -145,7 +145,7 @@
 % Kernel Hybride
 % Hyperviseurs
 % Choix des méacanise de communication noyau/user et user/user
-% 
+%
 % Divrsité de l'API
 %   Nombre d'appels système: qqs uns comme Hurd, ou beaucoup comme Linux
 %   API stable et definie (Linux) vs API movante (Windows)

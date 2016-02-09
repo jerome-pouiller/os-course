@@ -35,7 +35,7 @@
 %
 %\begin{frame}[fragile=singleslide]{Configuration globale}
 %  \emph{General setup}:
-%  \begin{itemize} 
+%  \begin{itemize}
 %  \item \emph{Prompt for  development and/or incomplete code/drivers}:
 %    Débloque  les  options  de  compilation  pour  les  drivers/option
 %    instables (staging, etc...)
@@ -58,17 +58,17 @@
 %\end{frame}
 %
 %\begin{frame}[fragile=singleslide]{Configuration globale}
-%  \begin{itemize} 
+%  \begin{itemize}
 %  \item  \c{SYSVIPC} et  \c{MQUEUE}:  Communication inter-processus
 %    définis par Posix
-%  \item \c{IKCONFIG}: Embarque le \file{.config} dans le noyau 
+%  \item \c{IKCONFIG}: Embarque le \file{.config} dans le noyau
 %  \item  \c{EXPERT} et  \c{EMBEDDED} Débloque  les  options permettant
 %    principalement  de réduire la  taille du  noyau en  supprimant des
 %    modules importants
 %  \item \c{CC_OPTIMIZE_FOR_SIZE}: Compile avec \c{-Os}
 %  \item \c{KPROBES},  \c{PERF_EVENTS}, \c{PROFILING}, \c{GCOV_KERNEL}:
 %    Active les différentes instrumentations du noyau
-%  \end{itemize} 
+%  \end{itemize}
 %\end{frame}
 %
 %\begin{frame}[fragile=singleslide]{Les périphériques de block}
@@ -76,12 +76,12 @@
 %  \\[2ex]
 %  \c{BLOCK}: Il est possible  de désactiver la gestion des périphérique
 %  de block si votre système n'utilise que de la mémoire flash.
-%  \begin{itemize} 
+%  \begin{itemize}
 %  \item \emph{IO  Schedulers}: Permet de choisir  un ordonnanceur d'E/S
 %    différent de celui proposé en standard
-%  \end{itemize} 
+%  \end{itemize}
 %  \emph{System type}:
-%  \begin{itemize} 
+%  \begin{itemize}
 %  \item Permet de choisir le type d'architecture et de chipset
 %  \item Il est  possible de désactiver certains cache  lors des phases
 %    de développement
@@ -94,7 +94,7 @@
 %
 %\begin{frame}[fragile=singleslide]{Options de l'horloges}
 %  \emph{Kernel features}
-%  \begin{itemize} 
+%  \begin{itemize}
 %  \item \c{HZ} (pas sur ARM): Définit l'intervalle de réordonnancement
 %    de l'ordonnanceur.   Plus cette valeur est  forte, plus l'overhead
 %    introduit par le changement de  contexte est important et plus les
@@ -109,10 +109,10 @@
 %    précision sur les mesure de  temps, à condition que votre matériel
 %    possède une horloge \emph{HighRes}.
 %  \end{itemize}
-%\end{frame}  
+%\end{frame}
 %
 %\begin{frame}[fragile=singleslide]{Options de l'ordonnanceur}
-%  \begin{itemize} 
+%  \begin{itemize}
 %  \item  \emph{Preemption Model}:  Permet d'activer  la  préemption du
 %    noyau. Le pire  temps réponse sont améliorés, mais  le temps moyen
 %    est généralement  moins bon.  Un noyau  préemptif stresse beaucoup
@@ -127,10 +127,10 @@
 %  \item Ne confondez pas la préemption du noyau avec la préemption des
 %    tâches utilisateur.
 %  \end{itemize}
-%\end{frame}  
+%\end{frame}
 %
 %\begin{frame}[fragile=singleslide]{Option de gestion de la mémoire}
-%  \begin{itemize} 
+%  \begin{itemize}
 %  \item \c{EABI},  \c{OABI}, etc...  : Différentes format  d'appel des
 %    fonctions. Spécifique à ARM (mais très important)
 %  \item  \emph{Memory Model}: Permet  de gérer  les futurs  systèmes à
@@ -142,7 +142,7 @@
 %    Uniquement   utile   avec   des   machines   virtuelles   ou   des
 %    chroot. Sinon, les  noyau sait que le fichier  est déjà en mémoire
 %    et ne duplique pas la page
-%  \end{itemize} 
+%  \end{itemize}
 %\end{frame}
 %
 %\subsection{Les options de boot}
@@ -183,7 +183,7 @@
 %  \item  \emph{Netfilter}  :  Le  firewall  de  Linux.   D'innombrable
 %    options.  Permet l'utilisation d'iptables si l'option \c{IPTABLES}
 %    est active.
-%  \end{itemize} 
+%  \end{itemize}
 %\end{frame}
 %
 %\subsection{Les systèmes de fichiers}
@@ -197,7 +197,7 @@
 %    espace utilisateur
 %  \item \emph{Pseudo  filesystems} Systèmes de  fichiers sans supports
 %    physiques
-%    \begin{itemize} 
+%    \begin{itemize}
 %    \item \c{TMPFS}: File system  volatile en RAM.  Très utilisé avec
 %      des système en flash vu que  l'accès à la Flash est coûteux en
 %      temps et destructeur pour la flash
@@ -207,7 +207,7 @@
 %      fichiers.  Ils  doivent être montés dans  \c{/sys} et \c{/proc}.
 %      \c{/proc} est  plutôt orienté  processus alors que  \c{/sys} est
 %      orienté modules et paramétrage du noyau.
-%    \end{itemize} 
+%    \end{itemize}
 %  \end{itemize}
 %\end{frame}
 %
@@ -215,7 +215,7 @@
 %  \begin{itemize}
 %  \item  \emph{Miscellaneous  filesystems}  Contient des  systèmes  de
 %    fichiers spécifiques
-%    \begin{itemize} 
+%    \begin{itemize}
 %    \item  \emph{eCrypt filesystem layer}  : Gestion  transparent d'un
 %      file system codé
 %    \item \emph{Journalling  Flash File  System v2} :  Spécialisé pour
@@ -225,15 +225,15 @@
 %      accès en écriture.
 %    \item  \emph{Squashed   file  system}:  Idem   \emph{cramfs}  mais
 %      fortement compressé
-%    \end{itemize} 
+%    \end{itemize}
 %  \item \emph{Network File Systems}
 %    \begin{itemize}
 %    \item \emph{NFS client support}  : File system sur ethernet.  Très
 %      utilisé dans l'embarqué durant les phases de développement
 %    \item \emph{Root file system on  NFS}: Permet de démarrer le noyau
 %      sur une partition NFS
-%    \end{itemize} 
-%  \end{itemize} 
+%    \end{itemize}
+%  \end{itemize}
 %\end{frame}
 %
 %\subsection{Les drivers}
@@ -251,14 +251,14 @@
 %    créés sans l'aide d'un programme extérieur.
 %  \item \emph{Memory Technology Device}: Les flashs
 %  \item \emph{Staging drivers}: Des drivers en cours de bêta
-%  \end{itemize} 
+%  \end{itemize}
 %\end{frame}
 %
 %\subsection{Autres options}
 %
 %\begin{frame}[fragile=singleslide]{Configuration du noyau}
 %  Mais aussi:
-%  \begin{itemize} 
+%  \begin{itemize}
 %  \item \emph{Kernel  Hacking}:  Options  concernant le  débugging  du
 %    noyau. % Nous y reviendrons dans la section Debug
 %  \item  \emph{Security  Options}:  Plusieurs framework  permettant  de
@@ -269,7 +269,7 @@
 %    (particulièrement les protocoles réseaux)
 %  \item  \emph{Library routines}: Idem  \emph{Cryptographic API}  mais
 %    avec principalement des calculs de checksum.
-%  \end{itemize} 
+%  \end{itemize}
 %\end{frame}
 %
 \section{Création de modules}
@@ -283,15 +283,15 @@
 \begin{frame}[fragile=singleslide]{Quelques macros de base}
   Ces macros  permettent de placer  des informations sur  des symboles
   particulier dans module;
-  \begin{itemize} 
+  \begin{itemize}
   \item Déclare la fonction à apeller lors du chargement du module
-    \begin{lstlisting} 
+    \begin{lstlisting}
 module_init
-    \end{lstlisting} 
+    \end{lstlisting}
   \item Déclare la fonction à appeller lors du déchargement du modules
-    \begin{lstlisting} 
+    \begin{lstlisting}
 module_exit
-    \end{lstlisting} 
+    \end{lstlisting}
   \item Déclare un paramètre
     \begin{lstlisting}
 module_param
@@ -307,7 +307,7 @@ MODULE_AUTHOR
   \end{itemize}
 \end{frame}
 \begin{frame}[fragile=singleslide]{Quelques macros de base}
-  \begin{itemize} 
+  \begin{itemize}
   \item Description du modules
     \begin{lstlisting}
 MODULE_DESCRIPTION
@@ -324,12 +324,12 @@ MODULE_VERSION
     pris en compte dans le calcul des dépendances de symboles.
     \begin{lstlisting}
 EXPORT_SYMBOL
-    \end{lstlisting} 
+    \end{lstlisting}
   \item Idem \cmd{EXPORT\_SYMBOL} mais  ne permet sont utilisation que
     pour les modules GPL
     \begin{lstlisting}
 EXPORT_SYMBOL_GPL
-    \end{lstlisting} 
+    \end{lstlisting}
   \end{itemize}
 \end{frame}
 
@@ -358,7 +358,7 @@ EXPORT_SYMBOL_GPL
 \begin{frame}[fragile=singleslide]{Les modules noyau}{my\_module}
   Makefile:
   \begin{lstlisting}
-obj-m := my_module.o  
+obj-m := my_module.o
   \end{lstlisting}
   Puis, on appelle:
   \begin{lstlisting}
@@ -374,7 +374,7 @@ default:
   \end{lstlisting}
   et on appelle
   \begin{lstlisting}
-host$ make ARCH=arm CROSS_COMPILE=arm-linux- KDIR=../linux-2.6/usb-a9260 
+host$ make ARCH=arm CROSS_COMPILE=arm-linux- KDIR=../linux-2.6/usb-a9260
   \end{lstlisting} % $
 \end{frame}
 
@@ -383,7 +383,7 @@ host$ make ARCH=arm CROSS_COMPILE=arm-linux- KDIR=../linux-2.6/usb-a9260
 \begin{frame}[fragile=singleslide]{Compilation avec Kbuild}
   Fichier \file{Makefile} à l'intérieur de l'arborescence noyau:
   \begin{lstlisting}
-obj-$(MY_COMPILE_OPTION) := my_module.o  
+obj-$(MY_COMPILE_OPTION) := my_module.o
   \end{lstlisting} % $
   \lstinline+$(MY_COMPILE_OPTION)+ sera remplacé par :
   \begin{itemize}
@@ -393,11 +393,11 @@ obj-$(MY_COMPILE_OPTION) := my_module.o
   \end{itemize}
   Fichier \file{Kconfig}:
   \lstinputlisting[language=]{samples/mod0_min/Kconfig}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Utilisation de Kconfig}
   Chaque entrée \c{config} prend comme attribut:
-  \begin{itemize} 
+  \begin{itemize}
   \item Son type et sa description en une ligne:
     \begin{itemize}
     \item \c{tristate}, le plus  classique pouvant prendre les valeurs
@@ -405,7 +405,7 @@ obj-$(MY_COMPILE_OPTION) := my_module.o
     \item \c{bool} pouvant prendre seulement les valeurs n et y
     \item \c{int} prennant un nombre
     \item \c{string} prennant une chaîne
-    \end{itemize} 
+    \end{itemize}
   \item \c{default} Sa valeur par défaut
   \item  \c{depends on} L'option  n'apparait si  l'expression suivante
     est vraie.  Il est possible de spécifier  des conditions complexes
@@ -415,21 +415,21 @@ obj-$(MY_COMPILE_OPTION) := my_module.o
   \item   \c{help}  Description   détaillée  de   l'option.   Si  votre
     description ne  tient pas en moins  de 20 lignes,  pensez à écrire
     une documentation dans \file{Documentation} et à y faire référence
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Utilisation de Kconfig}
   Il est aussi possible:
-  \begin{itemize} 
+  \begin{itemize}
   \item D'inclure d'autres fichiers avec \c{source}
   \item De déclarer un sous menu avec \c{menu}
   \item  De demander  un choix  parmis un  nombre fini  d'options avec
     \c{choice}
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Gérer les modules}
-  \begin{itemize} 
+  \begin{itemize}
   \item Avoir des informations sur le module
     \begin{lstlisting}
 host$ modinfo my_module.ko
@@ -452,7 +452,7 @@ target% modprobe my_module
 target% modprobe -r my_module
     \end{lstlisting} %$
   \item Mettre à jour le fichier de dépendance
-    \begin{lstlisting} 
+    \begin{lstlisting}
 target% depmod
     \end{lstlisting} %$
   \end{itemize}
@@ -461,22 +461,22 @@ target% depmod
 \begin{frame}[fragile=singleslide]{Paramètres}
   Il est possible de passer des paramètres aux modules:
   \begin{lstlisting}
-target$ modinfo my_module.ko 
-target% insmod my_module.ko param=2  
-  \end{lstlisting} %$ 
-  Nous devons déclarer le paramètre à l'aide de la macro \texttt{module\_param}. 
+target$ modinfo my_module.ko
+target% insmod my_module.ko param=2
+  \end{lstlisting} %$
+  Nous devons déclarer le paramètre à l'aide de la macro \texttt{module\_param}.
   \begin{lstlisting}[language=c]
 #include <linux/moduleparam.h>
 module_param(param, int, 0644);
-  \end{lstlisting} 
+  \end{lstlisting}
   La paramètre doit évidement être alloué:
   \begin{lstlisting}[language=c]
 static int param = 0;
-  \end{lstlisting} 
+  \end{lstlisting}
   Il est fortement recommandé de documenter le paramètre
   \begin{lstlisting}[language=c]
 MODULE_PARM_DESC(param, "Display this value at loading and unloading");
-  \end{lstlisting} 
+  \end{lstlisting}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{\texttt{/sys}}
@@ -491,7 +491,7 @@ MODULE_PARM_DESC(param, "Display this value at loading and unloading");
 
 \begin{frame}[fragile=singleslide]{Les modules noyau}{my\_module}
   Quelques conseils:
-  \begin{itemize} 
+  \begin{itemize}
   \item  Pour mettre un code à la norme:
     \begin{lstlisting}
 host$ apt-get indent
@@ -501,7 +501,7 @@ host$ scripts/cleanfile my_module.c
   \item Voir \file{Documentation/CodingStyle}
   \item Sauvez l'espace de nom du noyau: utilisez des static !
   \item Votre code doit être réentrant
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
 \section{Notre premier device}
@@ -581,7 +581,7 @@ target% cat my_chardev
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Communiquer avec le noyau}{char\_dev}
-Ajoutons la gestion du buffer. Il est necessaire de prendre des précaution pour 
+Ajoutons la gestion du buffer. Il est necessaire de prendre des précaution pour
 accéder à la mémoire du programme utilisateur.
   \begin{lstlisting}[language=c]
 static char global_buf[255];

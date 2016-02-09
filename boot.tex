@@ -51,7 +51,7 @@
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Le Boot}
-  \begin{itemize} 
+  \begin{itemize}
   \item L'objectif du premier étage est de charger la suite du système
     en mémoire
     \begin{itemize}
@@ -562,7 +562,7 @@ uboot> nand write 21000000 400000 $filesize
   \item Ubifs est un filesystem qui optimise les accès à la flash au dessus d'UBI
   \end{itemize}
 \end{frame}
-  
+
 \begin{frame}[fragile=singleslide]{Ubifs}
   \begin{itemize}
   \item Création d'une partition Ubifs:
@@ -584,7 +584,7 @@ host$ ubinize -p 128KiB -m 2048 -o rootfs.ubi /tmp/ubinize.cfg
      \end{lstlisting}
   \end{itemize}
 \end{frame}
-  
+
 \begin{frame}[fragile=singleslide]{Ubifs}
   \begin{itemize}
   \item Flashage.
@@ -623,7 +623,7 @@ host% nandwrite -p /dev/mtd1 rootfs.jffs2
      \end{lstlisting}
   \end{itemize}
 \end{frame}
-  
+
 \begin{frame}[fragile=singleslide]{Monter le rootfs sur l'hôte}
   \begin{itemize}
 \item La suite est classique
@@ -660,7 +660,7 @@ host% mount -t ubifs /dev/ubi0_0 /tmp/ubi1
 %     \end{lstlisting}
 %   \end{itemize}
 % \end{frame}
-% 
+%
 % \begin{frame}[fragile=singleslide]{Monter le rootfs sur l'hôte}
 %   \begin{itemize}
 %   \item Chargeons la couche d''emulation par block et le filesystem

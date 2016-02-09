@@ -151,14 +151,14 @@ $ ls -l
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Placement des symboles de debug}
-  \begin{itemize} 
+  \begin{itemize}
   \item Il  est possible de passer  des options au linker  à partir de
     \cmd{gcc} en utilisant \cmd{-Wl,}
   \item  Il est  possible  de placer  les  symboles de  debug dans  un
     fichier séparé.
   \item Avec l'option \cmd{--build-id=uuid}, il est possible d'ajouter
     un identifiant à la binaire
-  \end{itemize} 
+  \end{itemize}
   \begin{lstlisting}
 $ gcc -Wl,--build-id=sha1 -g main.c -o main
 $ cp main -o main.dbg
@@ -203,22 +203,22 @@ $ objdump -h main main.dbg
     linker).   Il   est  possible  de  fabriquer   son  propre  format
     (\cmd{ld -T}) (utile pour générer des firmwares).
   \item Voir \file{u-boot.lds}.
-  \end{itemize} 
+  \end{itemize}
  % http://www.osdever.net/bkerndev/Docs/basickernel.htm
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les bibliothèques}
-  \begin{itemize} 
+  \begin{itemize}
   \item  Les  symboles déclaré dans les scripts
     de link sont placé aux endroits demandé en mémoire:
     \begin{lstlisting}
 void *etext;
 printf("My code end at %p", &etext);
-    \end{lstlisting} 
+    \end{lstlisting}
   \item \cmd{-Map=file} permet de sauver le mapping mémoire utilisé
     \begin{lstlisting}
 $ gcc -g -Wl,-Map=main.map main.c -o main
-    \end{lstlisting} 
+    \end{lstlisting}
   \end{itemize}
 \end{frame}
 
@@ -400,7 +400,7 @@ hello-static: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statical
 % A étoffer?
 
 \begin{frame}[fragile=singleslide]{Makefile}
-  \begin{itemize} 
+  \begin{itemize}
   \item Vieux système (qui a dit ``pourri''?)
   \item Beaucoup d'implémentations différentes
   \item Heureusement,  gmake (GNU Make) est quasiment  le seul utilisé
@@ -411,18 +411,18 @@ hello-static: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statical
   \item  Il existe  de nombreuses  alternatives au  Makefile,  mais ce
     dernier  a imposé des  standards qui  se retrouvent  dans beaucoup
     d'autres systèmes (nous en verrons quelques uns plus tard)
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Bases}
-  \begin{itemize} 
+  \begin{itemize}
   \item Principe du fichier \file{Makefile}:
-    \begin{lstlisting} 
+    \begin{lstlisting}
 cible: depends
        rules
 file.o: file.c dep.h
        gcc file.c -c -o file.o
-    \end{lstlisting} 
+    \end{lstlisting}
   \item \cmd{make} crée  un graphe de dépendance et  vérifie les dates
     de modifications  des fichierx afin  de n'éxecuter que  les règles
     nécessaires
@@ -436,7 +436,7 @@ file.o: file.c dep.h
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les variables}
-  \begin{itemize} 
+  \begin{itemize}
   \item Il est possible d'utiliser des variables
     \begin{lstlisting}
 CC = gcc
@@ -455,18 +455,18 @@ $ make CC=special-gcc
     ...
   \item  Il existe  aussi des  variables locales  aux  règles: \c{$<},
     \c{$@}, ....
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Makefile}
-  \begin{itemize} 
+  \begin{itemize}
   \item  Il  est  possible  de définir  des  règles
     génériques:
-    \begin{lstlisting} 
+    \begin{lstlisting}
 %.o: %.c
        gcc $< -c -o $@
 file.o: dep.h
-    \end{lstlisting} 
+    \end{lstlisting}
   \item De plus, il existe de nombreuses règles implicite qui facilite
     le travail
   \item  Utilisez  au maximum  les  règles  implicites facilite  votre
@@ -481,14 +481,14 @@ host$ make toto
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les règles \emph{phony}}
-  \begin{itemize} 
+  \begin{itemize}
   \item  Il  est  possible  de définir  des  règles  \emph{virtuelles}
     (\emph{phony}) pour simplifier certains traitements
     \begin{lstlisting}
 all: exec1 exec2
-    \end{lstlisting} 
+    \end{lstlisting}
   \item  Parmis  les règles  \emph{phony}  très répandues:  \c{clean},
     \c{distclean},   \c{install},    \c{all},   \c{check},   \c{dist},
     \c{distcheck}, \c{mrproper}...
-  \end{itemize} 
+  \end{itemize}
 \end{frame}

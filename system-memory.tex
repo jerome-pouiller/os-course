@@ -41,7 +41,7 @@
 %  Fonctionnement d'un appel système
 %  La séparation de la mémoire
 %  Les erreurs de segmentation
-%  L'overcommit 
+%  L'overcommit
 %  Le lazy loading
 %  L'allocation backée sur un fichier "shared"
 %  L'allocation backée sur un fichier "private" (COW)
@@ -181,11 +181,11 @@ Concretement:
         \file{include/linux/mm-types.h}, \c{mm_struct->pgd}
     \end{itemize}
 \end{frame}
-    
+
 \begin{frame}{La pagination et la MMU}
     \begin{center}
       \includegraphics[width=9cm]{pics/x86PageTableEntry4KB}
-    \end{center}    
+    \end{center}
   \begin{itemize}
   \item R/W: Read/Write
   \item P: Present
@@ -337,7 +337,7 @@ Concretement:
 \begin{frame}[fragile=singleslide]{Context Swap, cache et MMU}
     \begin{center}
       \includegraphics[width=9cm]{pics/mipsr3000_tlb}
-    \end{center}    
+    \end{center}
   \begin{itemize}
   \item Dans  le cas d'un  système multiprocessus, le  mappping change
     lorsque l'on passe d'une tache à l'autre

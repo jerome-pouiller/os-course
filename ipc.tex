@@ -30,7 +30,7 @@ void f2() {
   a++;
 }
        \end{lstlisting}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile]{Exemple de partage de données}
 Prennons le cas ou \verb+f1+ est préemptée par \verb+f2+:
@@ -49,7 +49,7 @@ a++;
      \begin{column}{5cm}
       \begin{lstlisting}[showlines=true,emptylines=10,escapeinside=\{\}]
 
-t[a] = data2; 
+t[a] = data2;
 // t[0] est {é}cras{é}!
 a++;
 // a = 1 maintenant
@@ -62,7 +62,7 @@ a++;
   Au lieu d'écrire  les deux données l'une après  l'autre, la valeur de
   \verb+data1+ est perdue alors  que \verb+t[1]+ contiendra une valeur
   aléatoire.
-\end{frame} 
+\end{frame}
 
 \subsection{Protection des ressources matériel}
 
@@ -71,35 +71,35 @@ a++;
   Le  registre  \c{0xABC0}  permet  de  placer la  donnée  à  envoyer.
   L'écriture  d'un 1  sur  le registre  \c{0xABC4} permet  d'effectuer
   l'envoi:
-\begin{lstlisting} 
+\begin{lstlisting}
 void send(int data) {
   *0xABC0 = data;
   *0xABC4 = 1;
 }
-  \end{lstlisting} 
-\end{frame} 
+  \end{lstlisting}
+\end{frame}
 
 \begin{frame}[fragile]{Exemple de ressource partagée}
   Etudions le cas de l'éxecution simultanée de cette fonction par deux
   tâches.  La première tâche appelle \c{send} avec \cmd{data = 42}:
-  \begin{lstlisting} 
+  \begin{lstlisting}
 *0xABC0 = 42
-  \end{lstlisting} 
+  \end{lstlisting}
   La  tâche est  préemptée.  La  seconde tâche  appelle  \c{send} avec
   \cmd{data = 10}:
-\begin{lstlisting} 
+\begin{lstlisting}
 *0xABC0 = 10
 *0xABC4 = 1
-\end{lstlisting} 
+\end{lstlisting}
   \c{10} est envoyé. La tâche 1 reprend la main:
-\begin{lstlisting} 
+\begin{lstlisting}
 *0xABC4 = 1
-\end{lstlisting} 
+\end{lstlisting}
   \c{10} (au lieu de \c{42}) est de nouveau envoyé.\\[3mm]
 
   Ce cas  est aussi valable dans  le cas d'une  interruption (bien que
   plus rare dans la pratique).
-\end{frame} 
+\end{frame}
 
 \subsection{Réentrance}
 
@@ -110,30 +110,30 @@ void send(int data) {
   Les problèmes d'accès concurrents se traduisent très souvent par des
   \emph{races  conditions}.   C'est à  dire  des problèmes  aléatoires
   produit par une séquence particulière d'évènements
-  \begin{itemize} 
+  \begin{itemize}
   \item   Les  \emph{races  conditions}   sont  souvent   difficiles  à
     reproduire et à identifier
   \item Les  \emph{races conditions} peuvent être latente  dans le code
     et se déclarer suite à une modification de l'environnement externe
   \item Une race condition coûte chère (difficulté de correction, peut
     potentiellement atterrir en production)
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Comment s'en protèger?}
   Comment s'en protèger?
-  \begin{itemize} 
+  \begin{itemize}
   \item  Ne  pas  utiliser  de  variables globales  ou  de  ressources
     partagées
   \item Utiliser des accès atomiques
   \item   Placer  des   accès   aux  ressources   partagée  dans   des
     \emph{sections critiques}
-  \end{itemize} 
+  \end{itemize}
   Une  fonction  pouvant  être  appellée simultanénement  depuis  deux
   contextes de tâches différentes est dite \emph{réentrante}
-\end{frame} 
+\end{frame}
 
-\begin{frame}{Partage de ressources critiques} 
+\begin{frame}{Partage de ressources critiques}
   Une ressource critique ne peut :
   \begin{itemize}
   \item être utilisée simultanément par plusieurs tâches
@@ -158,7 +158,7 @@ void send(int data) {
   \texttt{test\_and\_set} affecte le registre d'état en fonction de la
   valeur  du registre  et affecte  la valeur  1 au  registre.  On peut
   développer la fonction \c{lock} à partir de là:
-  \begin{lstlisting} 
+  \begin{lstlisting}
 void lock(mutex_t *m) {
   while (test_and_set(m))
     schedule();
@@ -168,12 +168,12 @@ void unlock(mutex_t *m) {
   m = 0;
   schedule();
 }
-  \end{lstlisting} 
+  \end{lstlisting}
 \end{frame}
 
 \begin{frame}[fragile]{Fonctionnement d'un mutex}
   Un peu mieux:
-  \begin{lstlisting} 
+  \begin{lstlisting}
 void lock(mutex_t *m) {
   while (test_and_set(m)) {
     this_task.reason = m;
@@ -190,7 +190,7 @@ void unlock(mutex_t *m) {
   schedule();
 }
   \end{lstlisting}
-\end{frame} 
+\end{frame}
 
 \section{Problème liés aux partage de ressources}
 
@@ -201,17 +201,17 @@ void unlock(mutex_t *m) {
   \item Dead Lock
   \item Latence induite
   \item Inversion de priorité
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
 \subsection{Dead Lock}
 
 \begin{frame}[fragile]{Dead lock}
-  \begin{itemize} 
+  \begin{itemize}
   \item Aussi appellé \emph{étreinte fatale}
   \item Deux tâches utilisent  deux ressources imbriquées dans l'ordre
     inverses
-  \end{itemize} 
+  \end{itemize}
   \begin{columns}
     \begin{column}{5cm}
       Tache 1:
@@ -221,7 +221,7 @@ lock(m1);
 
 
 lock(m2);
-      \end{lstlisting} 
+      \end{lstlisting}
     \end{column}
     \begin{column}{5cm}
       Tache 2:
@@ -231,29 +231,29 @@ lock(m2);
 // Deadlock ici:
 lock(m1);
 
-      \end{lstlisting} 
+      \end{lstlisting}
     \end{column}
   \end{columns}
   \begin{center}
     \input{pics/cs-deadlock.tex}
   \end{center}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile]{Dead lock}
   \textbf{Remarque:} \\
   Le code suivant:
-  \begin{lstlisting} 
+  \begin{lstlisting}
 lock(m);
-lock(m); 
-  \end{lstlisting} 
+lock(m);
+  \end{lstlisting}
   entraine un  \emph{double lock},  un type particulier  de \emph{Dead
     lock}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile]{Mutex dans une interruption}
   \textbf{Remarque:} \\
   Ne jamais utiliser de mutex dans une interruption.
-  \begin{itemize} 
+  \begin{itemize}
   \item Si  la ressource  est occuppée par  la tâche qui  vient d'être
     préemptée, le \texttt{lock()} s'éxécutera dans le même contexte
   \item[$\rightarrow$] Double lock
@@ -262,8 +262,8 @@ lock(m);
     l'objectif de rester le minimum de temps dans une interruption
   \item[$\rightarrow$]  Règle  générale:   Il  ne  faut  pas  appeller
     \texttt{schedule} dans une interruption.
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \section{Autres mécanismes de gestion d'accès concurrents}
 
@@ -274,18 +274,18 @@ lock(m);
 \subsection{Désactivation de l'ordonnanceur}
 
 \begin{frame}{Désactivation de l'ordonnanceur}
-  \begin{itemize} 
+  \begin{itemize}
   \item On demande à l'OS de ne plus être préemptif
   \item Horriblement dangereux
   \item A  priori, à  ne jamais  utiliser sauf pour  faire des  cas de
     tests
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \subsection{Sémaphore}
 
 \begin{frame}{Sémaphore}
-  \begin{itemize} 
+  \begin{itemize}
   \item  Différence entre un  mutex et  un semaphore  binaire: presque
     aucune.
   \item Parfois le sémaphore  binaire est utilisé pour implémentéer le
@@ -298,23 +298,23 @@ lock(m);
     implémentés sur les mutex mais pas sur les sémaphore.
 %  \item  Notons  aussi  que  les  algorithmes  d'héritage  de  priorité
 %    sont encore plus complexe sur les sémaphores
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \subsection{Mutex réentrant}
 
 \begin{frame}{Mutex Réentrant}
-  \begin{itemize} 
+  \begin{itemize}
   \item Idem  mutex, mais  si la même  tâche tente de  revérouiller le
     même mutex, le mutex est non-bloquant.
   \item Dans le cas  d'un mutex non-réentrant, ceci entraine forcement
     un dead-lock.
   \item Un sémaphore est maintenu pour connaitre le nombre de passage.
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Les API}
-  \begin{itemize} 
+  \begin{itemize}
   \item   Posix:   \c{pthread_mutex_lock},   \c{pthread_mutex_unlock},
     \c{sem_wait}, \c{sem_post}
   \item Linux: \c{futex}
@@ -322,8 +322,8 @@ lock(m);
   \item  Xenomai:  \c{rt_sem_p},  \c{rt_sem_v},  \c{rt_mutex_acquire},
     \c{rt_mutex_release}
     \item Win32: \c{EnterCriticalSection}, \c{LeaveCriticalSection}
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 
 \subsection{R/W Lock}
@@ -337,7 +337,7 @@ sections critiques.
 Solution 1 (\emph{reader preference}):
 \begin{columns}
   \begin{column} {5cm}
-    \begin{lstlisting} 
+    \begin{lstlisting}
 void read_lock() {
   // mutex protege read_count
   lock(mutex);
@@ -346,10 +346,10 @@ void read_lock() {
     lock(w);
   unlock(mutex);
 }
-    \end{lstlisting} 
+    \end{lstlisting}
   \end{column}
   \begin{column} {5cm}
-    \begin{lstlisting} 
+    \begin{lstlisting}
 void read_unlock() {
   lock(mutex);
   readcount--;
@@ -363,17 +363,17 @@ void write_lock() {
 void write_unlock() {
   unlock(w);
 }
-    \end{lstlisting} 
+    \end{lstlisting}
   \end{column}
 \end{columns}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile]{Read/Write Lock}
   Problème: un accès en écriture doit attendre que toutes les lectures
   soient terminées. Solution 2 (\emph{writer preference}):
   \begin{columns}
     \begin{column} {5cm}
-      \begin{lstlisting} 
+      \begin{lstlisting}
 void read_lock() {
   lock(r);
   lock(mutex);
@@ -384,10 +384,10 @@ void read_lock() {
   unlock(r);
   // r n'est pas bloque durant la lecture
 }
-       \end{lstlisting} 
+       \end{lstlisting}
      \end{column}
      \begin{column} {5cm}
-       \begin{lstlisting} 
+       \begin{lstlisting}
 void read_unlock() {
   lock(mutex);
   readcount--;
@@ -403,50 +403,50 @@ void write_unlock() {
   unlock(w);
   unlock(r);
 }
-      \end{lstlisting} 
+      \end{lstlisting}
     \end{column}
   \end{columns}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Les API}
-  \begin{itemize} 
+  \begin{itemize}
   \item  Posix:  \c{pthread_rwlock_wrlock}, \c{pthread_rwlock_rdlock},
     \c{pthread_rwlock_unlock}
   \item Xenomai: $\emptyset$
   \item  Win32: \c{AcquireSRWLockExclusive}, \c{AcquireSRWLockShared},
     \c{ReleaseSRWLockExclusive}, \c{ReleaseSRWLockShared}
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \subsection{Rendez-vous ou barrier}
 \begin{frame}[fragile]{Rendez-vous}
   Permet de synchroniser  deux tâches. La première tâche  arrivée à la
   barrière attend la seconde.
-\begin{lstlisting} 
+\begin{lstlisting}
 void init() {
   lock(m1);
   lock(m2);
 }
 \end{lstlisting}
 Tâche 1:
-\begin{lstlisting} 
+\begin{lstlisting}
   unlock(m1);
   lock(m2);
-\end{lstlisting} 
+\end{lstlisting}
 Tâche 2:
-\begin{lstlisting} 
+\begin{lstlisting}
   unlock(m2);
   lock(m1);
-\end{lstlisting} 
+\end{lstlisting}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Les API}
-  \begin{itemize} 
+  \begin{itemize}
   \item Posix: \c{pthread_barrier_wait}
   \item Xenomai: $\emptyset$
   \item Win32: \c{EnterSynchronizationBarrier}
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \subsection{Condition}
 
@@ -456,7 +456,7 @@ Tâche 2:
   Très utilisée pour le pattern des \cmd{work-thread}
   \begin{columns}
     \begin{column}{5cm}
-      \begin{lstlisting} 
+      \begin{lstlisting}
 void init() {
   lock(m);
 }
@@ -472,7 +472,7 @@ void signal() {
       \end{lstlisting}
     \end{column}
     \begin{column}{5.5cm}
-      \begin{lstlisting} 
+      \begin{lstlisting}
 // broadcast debloque
 // tous les waiters alors
 // que signal en debloque
@@ -480,15 +480,15 @@ void signal() {
 void broadcast()  {
   // Plus complexe, il
   // faut un mutex par
-  // waiters. 
+  // waiters.
 }
-      \end{lstlisting} 
+      \end{lstlisting}
     \end{column}
   \end{columns}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Les API}
-  \begin{itemize} 
+  \begin{itemize}
   \item    Posix:    \c{pthread_cond_wait},   \c{pthread_cond_signal},
     \c{pthread_cond_broadcast}
   \item Linux: \c{eventfd}, \c{select}, \c{read}, \c{write}
@@ -496,13 +496,13 @@ void broadcast()  {
   \item Xenomai: \c{rt_cond_signal}, \c{rt_cond_broadcast}, \c{rt_cond_wait}
   \item              Win32:              \c{WakeAllConditionVariable},
     \c{WakeConditionVariable}, \c{SleepConditionVariableCS}
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \subsection{Buffer circulaire et Queue}
 
 \begin{frame}[fragile]{Buffer circulaire et Queue}
-  \begin{itemize} 
+  \begin{itemize}
   \item  Précédement décrit dans  la section  ``Partage d'information
     avec les interruptions''
   \item Fonctionne aussi très bien entre les tâches
@@ -510,35 +510,35 @@ void broadcast()  {
     avec une interruption et des tâches
   \item Faire attention à l'allocation dynamique des objets
   \end{itemize}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Les API}
-  \begin{itemize} 
+  \begin{itemize}
   \item Posix/Linux: \c{mq_receive}, \c{mq_send}, \c{pipe}, \c{socket}
   \item Noyau Linux: \c{kfifo_put}, \c{kfifo_get}
   \item      Xenomai:     \c{rt_buffer_write},     \c{rt_buffer_read},
     \c{rt_queue_send}, \c{rt_queue_receive}
   \item Win32: \c{GetMessage}, \c{WaitMessage}
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 
 \subsection{Spin Lock, Mutex et désactivation des interruptions}
 
 \begin{frame}[fragile]{Spin Lock, Mutex et désactivation des interruptions}
   Lorsque:
-  \begin{itemize} 
+  \begin{itemize}
   \item  Vos  sections critiques  font  intervenir  des  tâches et  des
     interruptions
   \item Votre problème ne concerne  pas un échange de données (et donc
     le buffer circulaire n'est pas une solution)
   \item Vous ne pouvez pas faire autrement
-  \end{itemize} 
+  \end{itemize}
   alors,   vous  devez   combiner  les   trois   mécanismes  suivants:
   Désactivation des interruptions, Mutex et Spin Lock.
 
   Le point sur ces trois mécanismes:
-  \begin{itemize} 
+  \begin{itemize}
   \item  Si  une  ressource  est   partagée  entre  une  tâche  et  une
     interruption sur  le même coeur,  il est nécessaire  de désactiver
     les interruptions
@@ -551,7 +551,7 @@ void broadcast()  {
 
 \begin{frame}[fragile]{Spin Lock, Mutex et désactivation des interruptions}
   On pourrait imaginer un cas cummulant les trois contraintes:
-  \begin{lstlisting} 
+  \begin{lstlisting}
 disable_interrupts()
 mutex_lock(m)
 spin_lock(s)
@@ -559,37 +559,37 @@ a++
 spin_unlock(s)
 mutex_unlock(m)
 enable_interrupts()
-  \end{lstlisting} 
+  \end{lstlisting}
   Globalement, évitez!
-\end{frame} 
+\end{frame}
 
 \subsection{Algorithmes non-bloquants}
 
 \begin{frame}{Algorithmes non-bloquants}
-  \begin{itemize} 
+  \begin{itemize}
   \item Algorithme thread-safe n'utilisant pas de sections ciritques.
   \item Ces  algorithmes utilisent souvant  des instructions atomiques
     proposés par certains processeurs
   \item Par conséquent, ils sont peu portables
   \item Souvent utilisé dans les bases de données
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \subsection{Read-Copy-Update (RCU)}
 
 \begin{frame}{Read-Copy-Update (RCU)}
   Type d'algorithme non bloquant:
-  \begin{itemize} 
+  \begin{itemize}
   \item La lecture n'est pas bloquante
   \item On note le nombre de lecteurs
   \item Les modifications s'effectuent sur une copie de l'objet
   \item Les lectures suivante se font sur la nouvelle version de l'objet
   \item Lorsque  le dernier lecteur  a terminé, l'objet  d'origine est
     détruit. Seul subsiste la nouvelle version.
-  \end{itemize} 
+  \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Exemple : Manipulation de listes} 
+\begin{frame}[fragile]{Exemple : Manipulation de listes}
   \begin{center}
     \begin{lstlisting}[basicstyle=\ttfamily\scriptsize\color{colBasic},commentstyle=\scriptsize\itshape\color{colComments},numbers=none]
 typedef struct {
@@ -597,7 +597,7 @@ typedef struct {
    int count_usage = 0;
    bool obsolete = false;
 } rcu_t;
-rcu_t *a = malloc(sizeof(rcu_t)); 
+rcu_t *a = malloc(sizeof(rcu_t));
     \end{lstlisting}
   \end{center}
   \begin{columns}
@@ -617,42 +617,42 @@ void read_a() {
     \end{column}
     \begin{column}{5cm}
       \begin{lstlisting}[basicstyle=\ttfamily\scriptsize\color{colBasic},commentstyle=\scriptsize\itshape\color{colComments},numbers=none]
-void write_a() { 
+void write_a() {
    struct rcu_t *a3 = a;
    struct rcu_t *a2 = malloc(sizeof(rcu_t));
    memcpy(a2, a);
-   // modify a2;   
-   a = a2;  
+   // modify a2;
+   a = a2;
    a3->obsolete = true;
    if (!a3->count_usage)
       free(ptr);
 }
-      \end{lstlisting} 
+      \end{lstlisting}
     \end{column}
   \end{columns}
-\end{frame} 
+\end{frame}
 
 \subsection{Mémoire partagée}
 
 \begin{frame}[fragile=singleslide]{La mémoire partagée}
-  \begin{itemize} 
+  \begin{itemize}
   \item Utilise  le MMU pour partager  une page de  mémoire entre deux
     processus
   \item dans  cette page de  mémoire, il est possible  d'appliquer les
     mécanisme        de       synchronisation        des       threads
     (\man{pthread\_mutexattr\_getpshared(3)})
-  \item 
-  \end{itemize} 
-\end{frame} 
+  \item
+  \end{itemize}
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Les API}
-  \begin{itemize} 
+  \begin{itemize}
   \item Posix: \c{shm_open}, \c{mmap}, \c{ftruncate}
   \item Xenomai: \c{rt_heap_create}, \c{rt_heap_bind}
   \item     Win32:     \c{CreateFileMapping},     \c{OpenFileMapping},
     \c{MapViewOfFile}
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 \subsection{Les signaux}
 
@@ -676,7 +676,7 @@ void write_a() {
     particulière:
     \begin{columns}
       \begin{column}{3cm}
-        \begin{itemize} 
+        \begin{itemize}
         \item 1: HUP
         \item 2: INT (\c{^C})
         \item 3: QUIT (\c{^\\})
@@ -688,7 +688,7 @@ void write_a() {
         \end{itemize}
       \end{column}
       \begin{column}{3cm}
-        \begin{itemize} 
+        \begin{itemize}
         \item 9: KILL
         \item 10: USR1
         \item 11: SEGV
@@ -700,7 +700,7 @@ void write_a() {
         \end{itemize}
       \end{column}
       \begin{column}{3cm}
-        \begin{itemize} 
+        \begin{itemize}
         \item 17: CHLD
         \item 18: CONT
         \item 19: STOP (\c{^Z})
@@ -712,7 +712,7 @@ void write_a() {
         \end{itemize}
       \end{column}
       \begin{column}{3cm}
-        \begin{itemize} 
+        \begin{itemize}
         \item 25: XFSZ
         \item 26: VTALRM
         \item 27: PROF
@@ -732,34 +732,34 @@ void write_a() {
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Signaux Temps Réels}
-\begin{itemize} 
+\begin{itemize}
 \item Les signaux > 32 sont dit \emph{temps-réel}.
     \begin{itemize}
     \item Plusieurs signaux RT peuvent être en attente
     \item Garantie que les signaux arrivent dans l'ordre dans lesquels
       ils ont été envoyés
     \item Possibilité de passer des valeurs en arguments
-    \end{itemize} 
+    \end{itemize}
   \item Tombent en désuétude. Remplacés par des \emph{file descriptor}:
-    \begin{itemize} 
+    \begin{itemize}
     \item \man{signalfd(2)}
     \item \man{eventfd(2)}
     \item \man{timerfd\_create(2)}
     \item \man{inotify(7)}
-    \end{itemize}  
-  \end{itemize} 
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \subsection{Les bus logiciels}
 
 \begin{frame}[fragile=singleslide]{Les sockets}
-\end{frame} 
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Les bus logiciels}
-  \begin{itemize}  
+  \begin{itemize}
     \item soap, xml-rpc, corba, dcop, dbus, COM/DCOM
-  \end{itemize} 
-\end{frame} 
+  \end{itemize}
+\end{frame}
 
 
 

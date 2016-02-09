@@ -83,7 +83,7 @@
         \item Sauvegarde du contexte: principalement \c{$ip} (\emph{return address}) et \c{$fp}
         }
         \only<3->{
-        \item Affecte \c{$sp} à \c{$fp}, et l'adresse de la fonction à appeller à \c{$ip} 
+        \item Affecte \c{$sp} à \c{$fp}, et l'adresse de la fonction à appeller à \c{$ip}
         \item Ajoute la somme de  la taille du contexte  et des variables
           allouées localement à \c{$sp}
         \item Ainsi une allocation locale est très rapide (incrémentation de
@@ -418,7 +418,7 @@ void f(int i) {
     \item noir: référencé et analysé
     \end{itemize}
   \end{itemize}
-\end{frame}  
+\end{frame}
 
 \begin{frame}[fragile=singleslide]{Autre   technique:  \emph{tri-color
       marking}}
@@ -464,7 +464,7 @@ void f(int i) {
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{dmalloc}
-  \begin{itemize} 
+  \begin{itemize}
   \item Paquet Ubuntu bugué: \url{https://bugs.launchpad.net/ubuntu/+source/dmalloc/+bug/971174}
   %\item \cmd{ wget http://dmalloc.com/releases/dmalloc-5.5.2.tgz}
   %\item \cmd{tar xvzf dmalloc-5.5.2.tgz}

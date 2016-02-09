@@ -102,7 +102,7 @@ host$ make O=build ARCH=arm CROSS_COMPILE=arm-linux- uImage
   \item Partage de l'image par TFTP
     \begin{lstlisting}
 host% cp build/arch/arm/boot/uImage /var/lib/tftpboot/
-    \end{lstlisting} % $ 
+    \end{lstlisting} % $
     \note[item]{C'est mieux de compiler avec -j3}
     \note[item]{Il faut les laisser démarrer en NFS}
   \end{itemize}
@@ -277,7 +277,7 @@ host$ make O=build CROSS_COMPILE=arm-linux- CONFIG_PREFIX=~/nfs install
   \begin{itemize}
   \item Lancement automatique d'un shell
     \begin{lstlisting}
-host$ echo "::askfirst:/bin/sh" > etc/inittab 
+host$ echo "::askfirst:/bin/sh" > etc/inittab
     \end{lstlisting}
   \item Appel d'un script de démarrage.
     \begin{lstlisting}
@@ -309,7 +309,7 @@ host$ chmod +x etc/init.d/rcS
 
 \begin{frame}[fragile=singleslide]{Compilons init}{Fichiers de configuration}
   Nous  pouvons  maintenant  démarrer avec  \cmd{init=/bin/init}  mais
-  certaines fonctionnalités sont absentes (\cmd{ps}, \cmd{ifconfig}, 
+  certaines fonctionnalités sont absentes (\cmd{ps}, \cmd{ifconfig},
   \cmd{top}, \cmd{lsusb}, etc... )\\
   Il faut monter les partitions \cmd{/proc} et \cmd{/sys}:
   \begin{lstlisting}
@@ -318,8 +318,8 @@ target% mount -t sysfs none /sys
   \end{lstlisting}
   Automatisation du montage avec \file{inittab}:
   \begin{lstlisting}
-host$ echo "::sysinit:/bin/mount -t proc none /proc" >> etc/inittab 
-host$ echo "::sysinit:/bin/mount -t sysfs none /sys" >> etc/inittab 
+host$ echo "::sysinit:/bin/mount -t proc none /proc" >> etc/inittab
+host$ echo "::sysinit:/bin/mount -t sysfs none /sys" >> etc/inittab
   \end{lstlisting}
   Nos commandes semblent maintenant correctement fonctionner.
 \end{frame}
@@ -336,8 +336,8 @@ target% mount -a
   Nous pouvons utiliser le  fichier \file{etc/inittab} pour monter nos
   partitions automatiquement.
   \begin{lstlisting}
-host$ echo "::sysinit:/bin/mount -a" >> etc/inittab 
-host$ echo "::shutdown:/bin/mount -r -a" >> etc/inittab 
+host$ echo "::sysinit:/bin/mount -a" >> etc/inittab
+host$ echo "::shutdown:/bin/mount -r -a" >> etc/inittab
   \end{lstlisting}
 \end{frame}
 
@@ -457,7 +457,7 @@ host$ echo "root:x:::::::" > etc/shadow
     \end{itemize}
   \item  Pour \cmd{gcc},  on abbrège  souvent le  triplet  en omettant
     \verb+<VENDOR>+
-  \item Exemples: 
+  \item Exemples:
     \begin{itemize}
     \item ppc85-e8541-linux-gnu % A verfieir
     \item arm9-atmel-linux-ulibceabi % A verifier
@@ -471,7 +471,7 @@ host$ echo "root:x:::::::" > etc/shadow
 
 \begin{frame}[fragile=singleslide]{Compiler le cross-compiler et la libc}
   \begin{itemize}
-  \item 3 étapes: 
+  \item 3 étapes:
     \begin{itemize}
     \item On compile les \cmd{binutils} (assembleur et linker)
     \item On compile \cmd{gcc} (compilateur) avec les \cmd{binutils}
@@ -489,5 +489,5 @@ host$ echo "root:x:::::::" > etc/shadow
     \item Souvent des problèmes de compatibilité entre les versions
     \end{itemize}
   \end{itemize}
-\end{frame} 
+\end{frame}
 
