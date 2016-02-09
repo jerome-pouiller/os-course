@@ -587,16 +587,23 @@ host$ ubinize -p 128KiB -m 2048 -o rootfs.ubi /tmp/ubinize.cfg
   
 \begin{frame}[fragile=singleslide]{Ubifs}
   \begin{itemize}
-  \item Flashage. Remarquez que l'utilisation de ubiformat permet de conserver les \emph{erase counters}
+  \item Flashage.
     \begin{lstlisting}
-target% ubiformat /dev/mtd1 -f rootfs.ubifs
+target% nandwrite -p /dev/mtd1 rootfs.ubi
+     \end{lstlisting}
+  \item Flashage alternatif. Remarquez que l'utilisation de ubiformat permet de
+    conserver les \emph{erase counters}
+    \begin{lstlisting}
+target% ubiformat /dev/mtd1 -f rootfs.ubi
      \end{lstlisting}
   \item On peut maintenant monter le volume puis la partition
     \begin{lstlisting}
 target% ubiattach /dev/ubi_ctrl -m 1
 target% mount -t ubifs /dev/ubi0_0 /tmp/ubi0
      \end{lstlisting}
-     \item Remarquez que le volume doit être attaché avant de pouvoir monter la partition. Du coup, démarrer sur une partition ubifs possède une syntaxe particulière:
+     \item Remarquez que le volume doit être attaché avant de pouvoir monter la
+       partition. Du coup, démarrer sur une partition ubifs possède une syntaxe
+       particulière:
     \begin{lstlisting}
 ubi.mtd=rootfs rootfstype=ubifs root=ubi0:0
      \end{lstlisting}
@@ -704,7 +711,7 @@ host% mount -t ubifs /dev/ubi0_0 /tmp/ubi1
 host$ mkdir initramfs
 host$ cd initramfs
 host% tar xf rootfs.tar
-host% ln -s bin/busybox init 
+host% ln -s bin/busybox init
 # ou: cp .../hello-arm-static init
 host$ find . |  cpio -H newc -o | gzip > ../initramfs.gz
     \end{lstlisting}
@@ -712,7 +719,6 @@ host$ find . |  cpio -H newc -o | gzip > ../initramfs.gz
     \begin{lstlisting}
 host$ mkimage -A arm -T ramdisk -d initramfs.gz initramfs.gz.img
 host$ cp initramfs.gz.img /home/user/tftp
-uboot> tftp 21000000 initramfs.gz.img
     \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -723,7 +729,6 @@ uboot> tftp 21000000 initramfs.gz.img
     \cmd{bootm}. Evidement, le noyau doit être configuré pour utiliser
     le ramfs.
     \begin{lstlisting}
-uboot> setenv autostart no
 uboot> tftp 21000000 uImage
 uboot> tftp 21300000 initramfs.gz.img
 uboot> bootm 21000000 21300000
